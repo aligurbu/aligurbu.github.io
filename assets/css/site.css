@@ -858,6 +858,34 @@ a.cite:hover { color: var(--accent); border-color: var(--accent); }
 .fig--wide { grid-column: 1 / -1; }
 .fig-img { background: #fff; }
 .fig-img--dark { background: #000; }
+.fig-img--night { background: var(--night); }
+.fig-media { position: relative; }
+.fig video { display: block; width: 100%; height: auto; }
+.video-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(6, 11, 20, 0.58);
+  color: #e6ecf5;
+  opacity: 0.82;
+  transition: opacity 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.video-btn:hover, .video-btn:focus-visible { opacity: 1; border-color: rgba(94, 234, 212, 0.7); }
+.video-btn svg { width: 14px; height: 14px; }
+.video-btn .pause, .fig-media.is-playing .video-btn .play { display: none; }
+.fig-media.is-playing .video-btn .pause { display: block; }
+.video-btn--bottom { top: auto; bottom: 10px; }
+@media (max-width: 560px) {
+  .video-btn { top: 6px; right: 6px; width: 28px; height: 28px; }
+  .video-btn--bottom { top: auto; bottom: 6px; }
+  .video-btn svg { width: 12px; height: 12px; }
+}
 .fig img { width: 100%; }
 .fig--contain img { width: auto; max-width: 100%; max-height: 330px; margin-inline: auto; }
 .fig figcaption {

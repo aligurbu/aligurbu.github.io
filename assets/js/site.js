@@ -168,6 +168,34 @@
   /* ---------- Footer year ---------- */
   $$('[data-year]').forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 
+  /* ---------- Research animations: play while on screen, stay still for reduced motion, always pausable */
+  $$('[data-video]').forEach(function (box) {
+    var v = $('video', box), btn = $('[data-video-toggle]', box);
+    if (!v) return;
+    var userPaused = reduceMotion;
+    var play = function () { var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+    var sync = function () {
+      var on = !v.paused;
+      box.classList.toggle('is-playing', on);
+      if (btn) btn.setAttribute('aria-label', on ? 'Pause animation' : 'Play animation');
+    };
+    v.addEventListener('play', sync);
+    v.addEventListener('pause', sync);
+    if (btn) btn.addEventListener('click', function () {
+      if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); }
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { if (!userPaused) play(); } else if (!v.paused) { v.pause(); }
+        });
+      }, { threshold: 0.35 }).observe(box);
+    } else if (!userPaused) {
+      play();
+    }
+    sync();
+  });
+
   /* ---------- Hero / 404 simulation ---------- */
   var stage = $('[data-flow-stage]');
   if (stage && window.SquirmerFlow) {

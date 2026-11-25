@@ -320,7 +320,7 @@
             <p>Red blood cells squeeze through capillaries that are as narrow as, or narrower than, the cells themselves. How their thin, viscoelastic membrane deforms, and the tension it carries, matters for mechanosensitive ion channels such as PIEZO1, whose dysfunction is linked to hereditary anemia. For my dissertation, I built a spectral boundary integral solver coupled with thin-shell mechanics that simulates red blood cells in unbounded flow and in microcapillaries.</p>
             <ul class="results">
               <li>A fully implicit, multistep time integrator for spectral boundary integral simulations of red blood cell flow takes substantially larger time steps while needing about as many matrix–vector products as explicit methods. <a class="cite" href="https://doi.org/10.1063/5.0055036" target="_blank" rel="noopener">Phys. Fluids 2021 · Featured</a></li>
-              <li>Accounting for membrane viscoelasticity is essential to capture the transient shapes observed when a red blood cell starts flowing in a microcapillary. <a class="cite" href="https://doi.org/10.1016/j.bpj.2023.01.010" target="_blank" rel="noopener">Biophys. J. 2023</a></li>
+              <li>Accounting for membrane viscoelasticity is essential to capture the transient shapes observed when a red blood cell starts flowing in a microcapillary; in a constriction, a viscoelastic membrane makes the cell deform less and squeeze through more slowly. <a class="cite" href="https://doi.org/10.1016/j.bpj.2023.01.010" target="_blank" rel="noopener">Biophys. J. 2023</a></li>
               <li>Extending the framework to droplets whose interfaces carry their own shear and dilatational viscosity reveals how interfacial rheology governs a viscous drop that encloses a translating particle. <a class="cite" href="https://arxiv.org/abs/2605.01196" target="_blank" rel="noopener">arXiv 2026 · under review, JFM</a></li>
             </ul>
           </div>
@@ -328,6 +328,18 @@
             <figure class="fig fig--wide">
               <div class="fig-img"><img src="assets/img/research/rbc-start-up-shapes.webp" width="1616" height="229" loading="lazy" decoding="async" alt="Seven snapshots of a simulated red blood cell, from a round disk to an increasingly bullet-like, parachute shape, as it starts flowing in a narrow capillary."></div>
               <figcaption>A red blood cell with a viscoelastic membrane deforms from rest into a parachute shape in start-up capillary flow. Simulations by A. Gürbüz; see Gürbüz et al., <cite>Biophysical Journal</cite> (2023).</figcaption>
+            </figure>
+            <figure class="fig fig--wide">
+              <div class="fig-img fig-img--night fig-media" data-video>
+                <video muted loop playsinline preload="none" poster="assets/video/rbc-constriction.webp" width="1280" height="600" aria-label="Animation of two simulated red blood cells squeezing through a narrow constriction in a capillary. The cell with a purely elastic membrane gets through faster than the cell with a viscoelastic membrane.">
+                  <source src="assets/video/rbc-constriction.mp4" type="video/mp4">
+                </video>
+                <button type="button" class="video-btn" data-video-toggle aria-label="Play animation">
+                  <svg class="pause" aria-hidden="true"><use href="#i-pause"/></svg>
+                  <svg class="play" aria-hidden="true"><use href="#i-play"/></svg>
+                </button>
+              </div>
+              <figcaption>Squeezing through a 6 μm constriction in the same pressure-driven flow, a cell with a purely elastic membrane (top) deforms more and gets through faster than one with a viscoelastic membrane (bottom). Shading shows the flow speed. Simulations by A. Gürbüz; see Gürbüz et al., <cite>Biophysical Journal</cite> (2023).</figcaption>
             </figure>
             <figure class="fig fig--wide fig--contain">
               <div class="fig-img fig-img--dark"><img src="assets/img/research/drop-enclosing-particle.webp" width="584" height="586" loading="lazy" decoding="async" alt="Cross-section of a spherical drop with a strongly viscous interface; a small black particle inside translates to the right, with velocity arrows and a glowing color map showing the flow inside and outside the drop."></div>
@@ -383,10 +395,22 @@
               <li><strong>End-to-end differentiable simulation</strong> through spectral boundary integral solvers, which turns the recovery of membrane and interfacial properties from observed shapes into gradient-based optimization.</li>
             </ul>
           </div>
-          <div class="thrust-media reveal">
-            <figure class="fig">
+          <div class="thrust-media fig-grid reveal">
+            <figure class="fig fig--wide">
               <div class="fig-img"><img src="assets/img/research/sciml-schematic.webp" width="2400" height="902" loading="lazy" decoding="async" alt="Three-panel schematic: (A) a neural network with a spectral representation trained on a composite loss of Stokes equations, surface condition, and far-field decay; (B) continuous data assimilation by nudging a model toward sparse, noisy observations, with proved error bounds; (C) a differentiable spectral boundary integral solver whose predicted shapes are compared with observed shapes to update unknown parameters."></div>
               <figcaption>Three ways to keep physics central while learning from data: (A) a physics-informed neural network solver, (B) continuous data assimilation by nudging, and (C) differentiation through the solver itself. Schematics of methods, not results.</figcaption>
+            </figure>
+            <figure class="fig fig--wide">
+              <div class="fig-img fig-media" data-video>
+                <video muted loop playsinline preload="none" poster="assets/video/swimmers-thank-you.webp" width="1080" height="520" aria-label="Animation: eight three-sphere microswimmers, one per letter, swim from target point to target point and trace the words THANK YOU.">
+                  <source src="assets/video/swimmers-thank-you.mp4" type="video/mp4">
+                </video>
+                <button type="button" class="video-btn video-btn--bottom" data-video-toggle aria-label="Play animation">
+                  <svg class="pause" aria-hidden="true"><use href="#i-pause"/></svg>
+                  <svg class="play" aria-hidden="true"><use href="#i-play"/></svg>
+                </button>
+              </div>
+              <figcaption>Learning to navigate: eight three-sphere microswimmers, each steered by the same deep-reinforcement-learning policy, swim through prescribed waypoints (open circles) to spell THANK YOU. Swimmer model and training method from Zou et al., <a href="https://doi.org/10.1038/s42005-022-00935-x" target="_blank" rel="noopener"><cite>Communications Physics</cite> (2022)</a>; waypoint steering and animation by A. Gürbüz.</figcaption>
             </figure>
           </div>
         </article>

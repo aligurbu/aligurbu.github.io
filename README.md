@@ -24,10 +24,14 @@ cv.pdf                  Public CV (no home address, phone number, or referee con
 assets/css/site.css     The whole design system: tokens, light/dark themes, layout, components, print styles
 assets/js/flow.js       Squirmer flow engine (exact Stokes solution, tracers, streamlines, speed map)
 assets/js/flow-lab.js   Flow Lab user interface and the three-sphere swimmer model
-assets/js/site.js       Theme toggle, navigation, scrollspy, reveal-on-scroll, publication filters, copy buttons
+assets/js/site.js       Theme toggle, navigation, scrollspy, reveal-on-scroll, publication filters, copy buttons,
+                        and the research animations (play while on screen, never autoplay with reduced motion)
 assets/js/theme-init.js Applies the saved theme before first paint (no flash)
 assets/fonts/           Newsreader, Inter, and JetBrains Mono (latin subsets, SIL Open Font License)
 assets/img/research/    Figures from published work, each cited in its caption
+assets/img/avatar.png   Profile picture (1024 px): the elastic red blood cell leaving the 6 μm constriction at
+                        t = 12 ms, rendered from the Biophys. J. 2023 simulation data; the app icons are scaled from it
+assets/video/           Research animations (H.264 MP4) and their poster frames (WebP)
 tools/og-card.html      Template for the social preview image (assets/img/og-card.jpg)
 ```
 
