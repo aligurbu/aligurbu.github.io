@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Flow Lab · Life at Low Reynolds Number · Ali Gürbüz</title>
+  <meta name="description" content="Interactive explainers of microswimmer physics: steer a squirmer through the exact Stokes flow it generates, and build a three-sphere swimmer to see why reciprocal strokes go nowhere and how porous media slow it down.">
+  <meta name="author" content="Ali Gürbüz">
+  <meta name="theme-color" content="#060b14">
+  <link rel="canonical" href="https://aligurbu.github.io/flow-lab/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ali Gürbüz">
+  <meta property="og:title" content="Flow Lab · Life at low Reynolds number, live">
+  <meta property="og:description" content="Steer a squirmer, morph pushers into pullers, and build a three-sphere swimmer: microswimmer physics computed live in your browser.">
+  <meta property="og:url" content="https://aligurbu.github.io/flow-lab/">
+  <meta property="og:image" content="https://aligurbu.github.io/assets/img/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
+  <link rel="preload" href="../assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script src="../assets/js/theme-init.js"></script>
+  <script src="../assets/js/flow.js" defer></script>
+  <script src="../assets/js/site.js" defer></script>
+  <script src="../assets/js/flow-lab.js" defer></script>
+</head>
+<body>
+  <svg width="0" height="0" class="visually-hidden" aria-hidden="true" focusable="false">
+    <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></g></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" data-solid="false">
+    <div class="container header-inner">
+      <a class="brand" href="../" aria-label="Ali Gürbüz, home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <defs>
+            <radialGradient id="bm-g" cx="36%" cy="34%" r="72%">
+              <stop offset="0" stop-color="#ffb3ba"/>
+              <stop offset=".5" stop-color="#e23b52"/>
+              <stop offset="1" stop-color="#8a0f24"/>
+            </radialGradient>
+          </defs>
+          <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".85">
+            <path d="M2.5 9.6c5.4 0 7.6-4.1 13.5-4.1s8.1 4.1 13.5 4.1"/>
+            <path d="M2.5 22.4c5.4 0 7.6 4.1 13.5 4.1s8.1-4.1 13.5-4.1"/>
+          </g>
+          <circle cx="16" cy="16" r="7" fill="url(#bm-g)"/>
+        </svg>
+        <span>Ali Gürbüz</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="../#about">About</a></li>
+          <li><a href="../#research">Research</a></li>
+          <li><a href="../#publications">Publications</a></li>
+          <li><a href="../#teaching">Teaching</a></li>
+          <li><a href="./" aria-current="page">Flow Lab</a></li>
+          <li><a class="nav-cv" href="../cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        </ul>
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode" aria-pressed="false">
+          <svg class="sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+        <button class="icon-btn menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open menu">
+          <svg aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="lab-hero" data-hero aria-labelledby="lab-title">
+      <div class="container">
+        <p class="eyebrow">Flow Lab</p>
+        <h1 id="lab-title">Life at low Reynolds number, <em>live</em></h1>
+        <p class="lede">Bacteria, algae, and the soft microrobots I study live in a world where viscosity rules and inertia is irrelevant. These two explainers run on the same mathematics as my research, computed in your browser as you watch.</p>
+        <ul class="lab-toc">
+          <li><a href="#squirmer"><span>01</span>Squirmers: pushers, pullers &amp; the flows they make</a></li>
+          <li><a href="#three-sphere"><span>02</span>Three spheres, one stroke</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== EXPLORABLE 1: SQUIRMER ===================== -->
+    <section class="lab-section" id="squirmer" aria-labelledby="sq-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Explorable 01</p>
+          <h2 id="sq-title">How a sphere swims by moving its surface</h2>
+          <p class="lede">A <em>squirmer</em> is the classic model of a ciliated microorganism: a sphere whose surface slides backward, pushing it forward. Slide <b>β</b> to morph it from a pusher into a puller, switch frames, and steer it with your cursor. Every tracer moves with the exact Stokes-flow solution.</p>
+        </div>
+
+        <div class="explorable">
+          <div class="stage" id="sq-stage" role="img" aria-label="Animated tracer particles in the flow around a swimming sphere; tracers glow with the local fluid speed.">
+            <p class="stage-hint">Move the cursor over the flow to steer · lab frame</p>
+          </div>
+          <div class="controls">
+            <div class="control">
+              <p class="control-label"><label for="sq-beta">Squirming parameter β</label><output id="sq-beta-out" for="sq-beta">−3.0</output></p>
+              <input type="range" id="sq-beta" min="-5" max="5" step="0.1" value="-3">
+              <div class="range-scale" aria-hidden="true"><span>pusher</span><span>neutral</span><span>puller</span></div>
+            </div>
+            <div class="control">
+              <p class="control-label">Frame of reference</p>
+              <div class="seg" role="group" aria-label="Frame of reference">
+                <button type="button" data-frame="lab" aria-pressed="true">Lab</button>
+                <button type="button" data-frame="swimmer" aria-pressed="false">Swimmer</button>
+              </div>
+            </div>
+            <div class="control">
+              <p class="control-label">Show</p>
+              <div class="toggles">
+                <label class="toggle"><input type="checkbox" data-layer="tracers" checked> Glowing tracers</label>
+                <label class="toggle"><input type="checkbox" data-layer="streamlines"> Streamlines</label>
+                <label class="toggle"><input type="checkbox" data-layer="speedMap"> Speed map</label>
+              </div>
+            </div>
+            <p class="readout" id="sq-readout" aria-live="polite"></p>
+            <div class="btn-row">
+              <button type="button" class="lab-btn" id="sq-toggle"><svg aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button>
+              <button type="button" class="lab-btn" id="sq-reset"><svg aria-hidden="true"><use href="#i-reset"/></svg><span>Reset</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="explain-grid">
+          <div class="prose">
+            <h3>What you are seeing</h3>
+            <p>Each tracer is a fluid particle carried by the flow and colored by its speed. In the <b>lab frame</b> the fluid far away is at rest: as the squirmer passes, nearby tracers are pushed aside and then drawn back, tracing loops instead of being swept along. In the <b>swimmer frame</b> you ride along with the squirmer and watch the fluid stream past it.</p>
+            <p>The surface of the sphere slides with velocity</p>
+            <math display="block" aria-label="u sub s of theta equals B 1 sine theta times open paren 1 plus beta cosine theta close paren">
+              <mrow>
+                <msub><mi>u</mi><mi>s</mi></msub><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo>
+                <msub><mi>B</mi><mn>1</mn></msub><mi>sin</mi><mo>&#x2061;</mo><mi>θ</mi>
+                <mo>(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mi>cos</mi><mo>&#x2061;</mo><mi>θ</mi><mo>)</mo>
+                <mo>,</mo><mspace width="1em"/>
+                <mi>U</mi><mo>=</mo><mfrac><mrow><mn>2</mn><msub><mi>B</mi><mn>1</mn></msub></mrow><mn>3</mn></mfrac>
+              </mrow>
+            </math>
+            <p>and it swims at speed <i>U</i> = 2<i>B</i><sub>1</sub>/3 no matter what β is. The second mode, β = <i>B</i><sub>2</sub>/<i>B</i><sub>1</sub>, does not change the speed at all. It decides <em>how</em> the swimmer disturbs the fluid. In the lab frame, with <i>θ</i> measured from the swimming direction, the flow is</p>
+            <math display="block" aria-label="u r equals two thirds B1 a cubed over r cubed cosine theta plus B2 times a to the fourth over r to the fourth minus a squared over r squared times P2 of cosine theta">
+              <mrow>
+                <msub><mi>u</mi><mi>r</mi></msub><mo>=</mo>
+                <mfrac><mn>2</mn><mn>3</mn></mfrac><msub><mi>B</mi><mn>1</mn></msub>
+                <mfrac><msup><mi>a</mi><mn>3</mn></msup><msup><mi>r</mi><mn>3</mn></msup></mfrac>
+                <mi>cos</mi><mo>&#x2061;</mo><mi>θ</mi><mo>+</mo>
+                <msub><mi>B</mi><mn>2</mn></msub>
+                <mrow><mo>(</mo>
+                  <mfrac><msup><mi>a</mi><mn>4</mn></msup><msup><mi>r</mi><mn>4</mn></msup></mfrac><mo>−</mo>
+                  <mfrac><msup><mi>a</mi><mn>2</mn></msup><msup><mi>r</mi><mn>2</mn></msup></mfrac>
+                <mo>)</mo></mrow>
+                <msub><mi>P</mi><mn>2</mn></msub><mo>(</mo><mi>cos</mi><mo>&#x2061;</mo><mi>θ</mi><mo>)</mo>
+              </mrow>
+            </math>
+            <math display="block" aria-label="u theta equals one third B1 a cubed over r cubed sine theta plus B2 a to the fourth over r to the fourth sine theta cosine theta">
+              <mrow>
+                <msub><mi>u</mi><mi>θ</mi></msub><mo>=</mo>
+                <mfrac><mn>1</mn><mn>3</mn></mfrac><msub><mi>B</mi><mn>1</mn></msub>
+                <mfrac><msup><mi>a</mi><mn>3</mn></msup><msup><mi>r</mi><mn>3</mn></msup></mfrac>
+                <mi>sin</mi><mo>&#x2061;</mo><mi>θ</mi><mo>+</mo>
+                <msub><mi>B</mi><mn>2</mn></msub>
+                <mfrac><msup><mi>a</mi><mn>4</mn></msup><msup><mi>r</mi><mn>4</mn></msup></mfrac>
+                <mi>sin</mi><mo>&#x2061;</mo><mi>θ</mi><mi>cos</mi><mo>&#x2061;</mo><mi>θ</mi>
+              </mrow>
+            </math>
+            <p>The <i>B</i><sub>2</sub> term decays slowly, like 1/<i>r</i><sup>2</sup>. That is the flow of a force dipole, and its sign separates two kinds of swimmers. <b>Pushers</b> (β &lt; 0), like <i>E. coli</i>, are propelled from behind and push fluid out along their axis. <b>Pullers</b> (β &gt; 0), like the alga <i>Chlamydomonas</i>, pull themselves forward and draw fluid in along their axis. A neutral squirmer (β = 0) leaves only a source dipole that fades like 1/<i>r</i><sup>3</sup>. When |β| &gt; 1 the surface slip reverses near one pole, which you can spot in the moving surface dots.</p>
+            <h3>Steering, honestly</h3>
+            <p>When you steer, the swimmer is turned by an external torque, the way a magnetic field turns a magnetic microrobot. A rigid rotation adds a rotlet flow, <b>Ω</b> × <b>r</b> (<i>a</i>/<i>r</i>)<sup>3</sup>. Because Stokes flow is linear, adding it to the squirming flow is exact. The flow is also axisymmetric about the swimming direction, so fluid in any plane through that axis stays in the plane. The canvas shows exactly that plane.</p>
+          </div>
+          <aside class="aside-card">
+            <h4>In my research</h4>
+            <ul>
+              <li><a href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">Collinear swimming of a squirmer pair</a> in Newtonian and shear-thinning fluids: how two squirmers interact, and how shear thinning reshapes the flow between them (<i>Phys. Rev. Fluids</i>, 2026).</li>
+              <li>The rotational speed of a <b>swirling spheroidal squirmer</b> in a shear-thinning fluid, combining theory and simulation (manuscript in preparation).</li>
+              <li><b>Physics-informed neural networks</b> for squirmer locomotion that build exactly these Stokes-flow conditions into training (<a href="../#research">Thrust three</a>).</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EXPLORABLE 2: THREE-SPHERE SWIMMER ===================== -->
+    <section class="lab-section" id="three-sphere" aria-labelledby="ts-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Explorable 02</p>
+          <h2 id="ts-title">Three spheres, one stroke</h2>
+          <p class="lede">The Najafi–Golestanian swimmer is three spheres joined by two arms that stretch and shrink. Choose a stroke and watch the shape-space loop: its enclosed area sets how far the swimmer gets each cycle. Then thicken the fluid into a porous medium and watch it slow down.</p>
+        </div>
+
+        <div class="explorable">
+          <div>
+            <div class="tri-panels">
+              <div class="stage" id="ts-stage" role="img" aria-label="Three spheres on a line, connected by extensible arms, with tracer particles showing the flow they create.">
+                <p class="stage-hint" id="ts-hint">Four-step stroke</p>
+              </div>
+              <div class="subpanel" id="ts-shape" role="img" aria-label="The stroke drawn as a loop in the plane of the two arm lengths.">
+                <p class="subpanel-title">Shape space</p>
+              </div>
+            </div>
+            <div class="plot-strip" id="ts-plot" role="img" aria-label="Position of the swimmer's center over time.">
+              <p class="subpanel-title">Center position vs. stroke cycles</p>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="control">
+              <p class="control-label">Stroke</p>
+              <div class="seg" role="group" aria-label="Stroke">
+                <button type="button" data-stroke="four" aria-pressed="true">Four-step</button>
+                <button type="button" data-stroke="smooth" aria-pressed="false">Smooth</button>
+                <button type="button" data-stroke="recip" aria-pressed="false">Reciprocal</button>
+              </div>
+            </div>
+            <div class="control">
+              <p class="control-label"><label for="ts-eps">Arm stroke amplitude</label><output id="ts-eps-out" for="ts-eps">3.0 a</output></p>
+              <input type="range" class="range-mono" id="ts-eps" min="1" max="3.5" step="0.1" value="3">
+            </div>
+            <div class="control">
+              <p class="control-label"><label for="ts-alpha">Porous-medium screening</label><output id="ts-alpha-out" for="ts-alpha">α a = 0</output></p>
+              <input type="range" class="range-mono" id="ts-alpha" min="0" max="1.2" step="0.02" value="0">
+              <div class="range-scale" aria-hidden="true"><span>clear fluid</span><span>less permeable</span></div>
+            </div>
+            <div class="control">
+              <p class="control-label">Show</p>
+              <div class="toggles">
+                <label class="toggle"><input type="checkbox" id="ts-tracers" checked> Flow tracers</label>
+                <label class="toggle"><input type="checkbox" id="ts-arrows" checked> Sphere velocities</label>
+              </div>
+            </div>
+            <p class="readout" id="ts-readout" aria-live="polite"></p>
+            <div class="btn-row">
+              <button type="button" class="lab-btn" id="ts-toggle"><svg aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button>
+              <button type="button" class="lab-btn" id="ts-reset"><svg aria-hidden="true"><use href="#i-reset"/></svg><span>Reset</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="explain-grid">
+          <div class="prose">
+            <h3>Why reciprocal strokes go nowhere</h3>
+            <p>At low Reynolds number, the flow responds instantly to the boundaries, with no memory and no coasting. A stroke that retraces itself backward, like a scallop opening and closing, undoes its own progress exactly. This is Purcell's <em>scallop theorem</em>. Pick <b>Reciprocal</b>: the arms move in step, the loop in shape space collapses to a line, and the center returns to the same spot every cycle, to machine precision.</p>
+            <p>The <b>four-step</b> stroke of Najafi and Golestanian breaks the symmetry. Shrink arm 1, shrink arm 2, extend arm 1, extend arm 2: the path in the (<i>L</i><sub>1</sub>, <i>L</i><sub>2</sub>) plane encloses an area, and for small strokes the net displacement per cycle is proportional to that area. Swimming is geometry.</p>
+            <h3>Screening in a porous medium</h3>
+            <p>The three-sphere swimmer moves only because each sphere feels the flow created by the other two. In a porous medium, modeled by the Brinkman equation, that long-ranged hydrodynamic interaction is screened over a distance 1/α. Slide the screening up and the swimmer slows down. We found the same effect in our study of this swimmer in a Brinkman medium, where speed and efficiency both drop, in contrast to undulatory, helical, and squirmer-type swimmers, which are enhanced.</p>
+          </div>
+          <aside class="aside-card">
+            <h4>In my research</h4>
+            <ul>
+              <li><a href="https://doi.org/10.1063/5.0163348" target="_blank" rel="noopener">The effect of axisymmetric confinement</a> on propulsion of a three-sphere microswimmer: a tube slows it down (<i>Phys. Fluids</i>, 2023, Featured Article and AIP Scilight).</li>
+              <li><a href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">Propulsion of a three-sphere microrobot in a porous medium</a>: screening reduces speed and efficiency (<i>Phys. Rev. E</i>, 2024).</li>
+              <li>Finite-element models of a confined three-sphere swimmer, the project of a master's student I mentored at Santa Clara.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab-section" aria-labelledby="notes-title">
+      <div class="container prose">
+        <h2 id="notes-title" class="label">Notes on the models</h2>
+        <p>The squirmer flow is the exact Stokes solution for a sphere with the first two squirming modes (Lighthill 1952; Blake 1971), plus a rotlet when the swimmer is turned. Tracers are integrated with a midpoint rule. The three-sphere swimmer uses point-force hydrodynamic interactions between the spheres, Oseen-level in a clear fluid and the Brinkman fundamental solution in a porous medium, with the sphere drag corrected for Brinkman screening. This captures the mechanism and the trends, not the full resolved calculations in the papers. Everything runs in plain JavaScript, with no libraries and no data sent anywhere.</p>
+        <p><a href="../">← Back to the main page</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span data-year>2026</span> Ali Gürbüz</p>
+      <p>Hand-built with HTML, CSS, and vanilla JavaScript. No trackers, no cookies.</p>
+    </div>
+  </footer>
+</body>
+</html>
