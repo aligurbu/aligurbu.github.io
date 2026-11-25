@@ -1,0 +1,17 @@
+# Local tooling
+.claude/
+node_modules/
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+.vscode/
+.idea/
+
+# Never commit private application material
+*.tex
+*.aux
+*.bbl
