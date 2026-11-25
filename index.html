@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Ali Gürbüz · Fluid Mechanics, Computational Mechanics &amp; Scientific Machine Learning</title>
+  <meta name="description" content="Ali Gürbüz is an Assistant Teaching Professor and Postdoctoral Research Fellow in Mathematics at Towson University and a Senior Research Associate in Mechanical Engineering at Santa Clara University, working on microhydrodynamics, biophysics, boundary integral methods, and scientific machine learning.">
+  <meta name="author" content="Ali Gürbüz">
+  <meta name="theme-color" content="#060b14">
+  <link rel="canonical" href="https://aligurbu.github.io/">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Ali Gürbüz">
+  <meta property="og:title" content="Ali Gürbüz · Soft bodies in viscous flows">
+  <meta property="og:description" content="Computational models of red blood cells, droplets, and microswimmers, and the scientific machine learning tools that infer their physics from data.">
+  <meta property="og:url" content="https://aligurbu.github.io/">
+  <meta property="og:image" content="https://aligurbu.github.io/assets/img/og-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Ali Gürbüz: glowing tracer particles in the Stokes flow around a microswimmer">
+  <meta property="profile:first_name" content="Ali">
+  <meta property="profile:last_name" content="Gürbüz">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preload" href="assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/theme-init.js"></script>
+  <script src="assets/js/flow.js" defer></script>
+  <script src="assets/js/site.js" defer></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ali Gürbüz",
+    "alternateName": "Ali Gurbuz",
+    "url": "https://aligurbu.github.io/",
+    "image": "https://aligurbu.github.io/assets/img/og-card.jpg",
+    "jobTitle": "Assistant Teaching Professor and Postdoctoral Research Fellow",
+    "worksFor": [
+      { "@type": "CollegeOrUniversity", "name": "Towson University", "url": "https://www.towson.edu/" },
+      { "@type": "CollegeOrUniversity", "name": "Santa Clara University", "url": "https://www.scu.edu/" }
+    ],
+    "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "University at Buffalo" },
+      { "@type": "CollegeOrUniversity", "name": "Istanbul Technical University" }
+    ],
+    "knowsAbout": ["Fluid mechanics", "Microhydrodynamics", "Fluid-structure interaction", "Boundary integral methods", "Thin-shell mechanics", "Scientific machine learning", "Physics-informed neural networks", "Continuous data assimilation", "Biophysics", "Soft matter", "Red blood cell mechanics", "Microswimmers"],
+    "sameAs": [
+      "https://orcid.org/0000-0003-3418-4883",
+      "https://scholar.google.com/citations?user=TRo7GwwAAAAJ",
+      "https://github.com/aligurbu",
+      "https://www.linkedin.com/in/aligurbu/",
+      "https://www.youtube.com/@HappyComputing"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <svg width="0" height="0" class="visually-hidden" aria-hidden="true" focusable="false">
+    <symbol id="i-scholar" viewBox="0 0 24 24"><path fill="currentColor" d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3 1 9l11 6 9-4.91V17h2V9L12 3z"/></symbol>
+    <symbol id="i-orcid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8.3 10v6.4" stroke-linecap="round"/><path d="M11.2 10v6.4h2c2 0 3.4-1.3 3.4-3.2S15.2 10 13.2 10h-2z" stroke-linejoin="round"/></g><circle cx="8.3" cy="7.6" r="1.05" fill="currentColor"/></symbol>
+    <symbol id="i-github" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="4.5" stroke-width="1.6"/><path d="M7.6 10.4V17M11.4 17v-6.6M11.4 13.4c0-1.8 1.1-3 2.6-3s2.4 1 2.4 2.8V17" stroke-width="1.8"/></g><circle cx="7.6" cy="7.5" r="1.15" fill="currentColor"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.2 9.3v5.4l4.7-2.7z" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></g></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 24 24"><path d="M8 16 16 8m0 0H9.5M16 8v6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></g></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></g></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.6v14H7zM13.4 5H17v14h-3.6z" fill="currentColor"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13.2 6l-2.4 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+    <symbol id="i-planet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="5.5"/><path d="M5.3 15.2C3.4 17.4 2.8 19.2 3.6 19.9c1.5 1.3 6.8-1.3 11.4-5.8s7.4-9.4 5.9-10.7c-.8-.7-2.6-.2-4.8 1.2"/></g></symbol>
+    <symbol id="i-game" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="7" width="19" height="10.5" rx="5.2"/><path d="M7.5 10.6v3.4M5.8 12.3h3.4"/></g><circle cx="15.6" cy="11.2" r="1.1" fill="currentColor"/><circle cx="17.9" cy="13.4" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15H17"/></g></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M11 3.5 12.9 9 18.5 11 12.9 13 11 18.5 9.1 13 3.5 11 9.1 9z"/><path d="M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></g></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4.5 5h15A1.5 1.5 0 0 1 21 6.5v9a1.5 1.5 0 0 1-1.5 1.5H11l-4.5 3.5V17h-2A1.5 1.5 0 0 1 3 15.5v-9A1.5 1.5 0 0 1 4.5 5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" data-solid="false">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Ali Gürbüz, back to top">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <defs>
+            <radialGradient id="bm-g" cx="36%" cy="34%" r="72%">
+              <stop offset="0" stop-color="#ffb3ba"/>
+              <stop offset=".5" stop-color="#e23b52"/>
+              <stop offset="1" stop-color="#8a0f24"/>
+            </radialGradient>
+          </defs>
+          <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".85">
+            <path d="M2.5 9.6c5.4 0 7.6-4.1 13.5-4.1s8.1 4.1 13.5 4.1"/>
+            <path d="M2.5 22.4c5.4 0 7.6 4.1 13.5 4.1s8.1-4.1 13.5-4.1"/>
+          </g>
+          <circle cx="16" cy="16" r="7" fill="url(#bm-g)"/>
+        </svg>
+        <span>Ali Gürbüz</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#research">Research</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#teaching">Teaching</a></li>
+          <li><a href="flow-lab/">Flow Lab</a></li>
+          <li><a class="nav-cv" href="cv.pdf" target="_blank" rel="noopener">CV</a></li>
+        </ul>
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode" aria-pressed="false">
+          <svg class="sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+        <button class="icon-btn menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open menu">
+          <svg aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" id="top" data-hero aria-labelledby="hero-name">
+      <div class="hero-stage" data-flow-stage aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-content">
+          <p class="eyebrow">Fluid mechanics · Applied mathematics · Scientific machine learning</p>
+          <h1 id="hero-name">Ali <span class="surname">Gürbüz</span></h1>
+          <p class="hero-lede">I study how soft, deformable bodies like red blood cells, droplets, and microswimmers move through viscous fluids, and how the fluid and the body reshape each other. I build the numerical methods that simulate them and the scientific machine learning tools that infer their physics from data.</p>
+          <ul class="hero-roles">
+            <li><span><strong>Assistant Teaching Professor &amp; Postdoctoral Research Fellow</strong>, Department of Mathematics, Towson University</span></li>
+            <li><span><strong>Senior Research Associate</strong>, Department of Mechanical Engineering, Santa Clara University</span></li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="cv.pdf" download="Ali_Gurbuz_CV.pdf">
+              <svg aria-hidden="true"><use href="#i-download"/></svg> Download CV
+            </a>
+            <a class="btn btn-ghost" href="#research">
+              Explore my research <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+            </a>
+          </div>
+          <ul class="social" aria-label="Profiles">
+            <li><a href="https://scholar.google.com/citations?user=TRo7GwwAAAAJ" rel="me noopener" target="_blank"><svg aria-hidden="true"><use href="#i-scholar"/></svg>Google Scholar</a></li>
+            <li><a href="https://orcid.org/0000-0003-3418-4883" rel="me noopener" target="_blank"><svg aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</a></li>
+            <li><a href="https://github.com/aligurbu" rel="me noopener" target="_blank"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a></li>
+            <li><a href="https://www.linkedin.com/in/aligurbu/" rel="me noopener" target="_blank"><svg aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a></li>
+            <li><a href="https://www.youtube.com/@HappyComputing" rel="me noopener" target="_blank"><svg aria-hidden="true"><use href="#i-youtube"/></svg>YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <aside class="sim-panel" data-sim-panel aria-label="About the live simulation">
+        <div class="live"><span class="live-dot" aria-hidden="true"></span>Live simulation</div>
+        <p>The exact Stokes-flow solution for a <em>squirmer</em>, a sphere that swims by moving its surface. Tracers glow with the local fluid speed. Move your cursor to steer it with an external torque, the way a magnetic field steers a microrobot.</p>
+        <div class="sim-row">
+          <div class="seg" role="group" aria-label="Swimmer type">
+            <button type="button" data-beta="-3" aria-pressed="true">Pusher</button>
+            <button type="button" data-beta="0" aria-pressed="false">Neutral</button>
+            <button type="button" data-beta="3" aria-pressed="false">Puller</button>
+          </div>
+          <button type="button" class="sim-btn" data-sim-toggle aria-label="Pause animation">
+            <svg class="pause" aria-hidden="true"><use href="#i-pause"/></svg>
+            <svg class="play" aria-hidden="true"><use href="#i-play"/></svg>
+          </button>
+          <a href="flow-lab/">How it works →</a>
+        </div>
+      </aside>
+      <div class="scroll-cue" aria-hidden="true"></div>
+    </section>
+
+    <!-- ============================ NEWS ============================ -->
+    <section class="news" aria-labelledby="news-title">
+      <div class="container">
+        <div class="news-head">
+          <h2 id="news-title" class="label">Recent</h2>
+        </div>
+        <ul class="news-grid">
+          <li>
+            <a class="news-card reveal" href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">
+              <span class="news-meta"><span>New paper</span><span>Sep 2026</span></span>
+              <span class="news-title">Collinear swimming of a squirmer pair in Newtonian and shear-thinning fluids</span>
+              <span class="news-sub">Published in <i>Physical Review Fluids</i> 11, 093103</span>
+            </a>
+          </li>
+          <li>
+            <a class="news-card reveal" href="https://arxiv.org/abs/2605.01196" target="_blank" rel="noopener">
+              <span class="news-meta"><span>Preprint</span><span>May 2026</span></span>
+              <span class="news-title">Effects of surface viscosities on the motion of a droplet enclosing a translating particle</span>
+              <span class="news-sub">First-author; under review at the <i>Journal of Fluid Mechanics</i> · arXiv:2605.01196</span>
+            </a>
+          </li>
+          <li>
+            <a class="news-card reveal" href="#teaching">
+              <span class="news-meta"><span>Teaching</span><span>Fall 2026</span></span>
+              <span class="news-title">Interactive 3D companions for all 26 Calculus III lectures</span>
+              <span class="news-sub">Students rotate surfaces and fields, change parameters, and type in their own functions</span>
+            </a>
+          </li>
+          <li>
+            <a class="news-card reveal" href="#service">
+              <span class="news-meta"><span>Service</span><span>2026–27</span></span>
+              <span class="news-title">Faculty Lead, Towson AI Institute</span>
+              <span class="news-sub">AI-assisted research workflows for faculty and librarians, and NAIRR allocation support</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================ ABOUT ============================ -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">01 · About</p>
+          <h2 id="about-title">The fluid shapes the body, and the body reshapes the fluid.</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-text reveal">
+            <p>I am a computational scientist working where fluid mechanics, applied mathematics, and biophysics meet. My research follows a two-way interaction: a viscous flow moves and deforms a cell, droplet, or microswimmer, and that body, in turn, reshapes the flow. To capture it, I develop spectral and high-order boundary integral methods coupled with thin-shell mechanics, and I pair them with scientific machine learning (physics-informed neural networks, continuous data assimilation, and differentiable simulation) to answer the inverse questions that experiments and design pose.</p>
+            <p>I am an Assistant Teaching Professor and Postdoctoral Research Fellow in the Department of Mathematics at Towson University, where I am also a Faculty Lead at the Towson AI Institute. I am a Senior Research Associate in Mechanical Engineering at Santa Clara University, working with On Shun Pak. Before that, I was a postdoctoral research fellow at Santa Clara and a research affiliate at the University of Illinois Urbana-Champaign. I earned my Ph.D. in Civil Engineering, with a concentration in computational engineering mechanics, at the University at Buffalo under Mettupalayam V. Sivaselvan, after completing dual B.S. degrees at Buffalo and Istanbul Technical University.</p>
+            <p>In the classroom, I make ideas visible, connect them to real problems, and give students room to explore. Before graduate school, I co-founded and managed a special education center in Istanbul for students with a wide range of disabilities.</p>
+
+            <details class="bio-details">
+              <summary>Short bio for talks and introductions <span class="hint">third person · copy</span></summary>
+              <div class="bio-body">
+                <p id="bio-text">Ali Gürbüz is an Assistant Teaching Professor and Postdoctoral Research Fellow in the Department of Mathematics at Towson University and a Senior Research Associate in Mechanical Engineering at Santa Clara University. Gürbüz's research combines boundary integral methods, thin-shell mechanics, and scientific machine learning to study how red blood cells, droplets, and microswimmers interact with the viscous fluids around them. Gürbüz received a Ph.D. in Civil Engineering from the University at Buffalo in 2021 and was a postdoctoral research fellow at Santa Clara University. Two of Gürbüz's papers have been selected as Featured Articles in Physics of Fluids.</p>
+                <button type="button" class="copy-btn" data-copy="#bio-text"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy bio</span></button>
+              </div>
+            </details>
+          </div>
+
+          <aside class="profile-card reveal" aria-label="At a glance">
+            <div class="profile-top">
+              <div class="portrait" aria-hidden="true">
+                <!-- To use a headshot: save it as assets/img/headshot.jpg and uncomment the next line. -->
+                <!-- <img src="assets/img/headshot.jpg" alt="" width="184" height="184"> -->
+                AG
+              </div>
+              <div>
+                <p class="profile-name">Ali Gürbüz</p>
+                <p class="profile-role">Towson, Maryland</p>
+              </div>
+            </div>
+
+            <h3 class="label">Currently</h3>
+            <ul class="facts">
+              <li><strong>Towson University</strong><span>Mathematics · Assistant Teaching Professor &amp; Postdoctoral Fellow</span></li>
+              <li><strong>Santa Clara University</strong><span>Mechanical Engineering · Senior Research Associate</span></li>
+              <li><strong>Towson AI Institute</strong><span>Faculty Lead, 2026–27</span></li>
+            </ul>
+
+            <h3 class="label">Education</h3>
+            <ul class="facts">
+              <li><strong>Ph.D., Civil Engineering, 2021</strong><span>University at Buffalo · Computational engineering mechanics</span></li>
+              <li><strong>M.S., Civil Engineering, 2015</strong><span>University at Buffalo · Structural &amp; earthquake engineering</span></li>
+              <li><strong>B.S., Civil Engineering, 2014</strong><span>University at Buffalo (magna cum laude) &amp; Istanbul Technical University, dual degree</span></li>
+            </ul>
+
+            <h3 class="label">Interests</h3>
+            <ul class="chips">
+              <li class="chip">Microhydrodynamics</li>
+              <li class="chip">Fluid–structure interaction</li>
+              <li class="chip">Complex fluids</li>
+              <li class="chip">Red blood cells</li>
+              <li class="chip">Microswimmers</li>
+              <li class="chip">Interfacial rheology</li>
+              <li class="chip">Electrohydrodynamics</li>
+              <li class="chip">Scientific ML</li>
+            </ul>
+
+            <h3 class="label">Tools</h3>
+            <ul class="chips">
+              <li class="chip chip--plain">Julia</li>
+              <li class="chip chip--plain">Python</li>
+              <li class="chip chip--plain">MATLAB</li>
+              <li class="chip chip--plain">PyTorch</li>
+              <li class="chip chip--plain">Lux.jl</li>
+              <li class="chip chip--plain">Mathematica</li>
+              <li class="chip chip--plain">C++ / Fortran</li>
+              <li class="chip chip--plain">COMSOL</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ RESEARCH ============================ -->
+    <section class="section section--alt" id="research" aria-labelledby="research-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">02 · Research</p>
+          <h2 id="research-title">Soft bodies in viscous flows</h2>
+          <p class="lede">Designing biomedical devices and soft microrobots depends on predicting how a fluid and the small, deformable bodies moving through it shape one another. My work is organized into three connected thrusts that share one computational core and one long-term goal: predictive frameworks that deepen fundamental understanding and inform the design of biomedical and soft robotic technologies.</p>
+          <ul class="chips methods" aria-label="Methods">
+            <li class="chip">Spectral boundary integral methods</li>
+            <li class="chip">High-order boundary elements</li>
+            <li class="chip">Thin-shell mechanics</li>
+            <li class="chip">Asymptotic theory</li>
+            <li class="chip">Finite elements</li>
+            <li class="chip">Physics-informed neural networks</li>
+            <li class="chip">Continuous data assimilation</li>
+            <li class="chip">Differentiable simulation</li>
+          </ul>
+        </div>
+
+        <!-- Thrust 1 -->
+        <article class="thrust" aria-labelledby="t1-title">
+          <div class="thrust-copy reveal">
+            <p class="thrust-num"><b>01</b>Thrust one</p>
+            <h3 id="t1-title">Cells and soft interfaces</h3>
+            <p>Red blood cells squeeze through capillaries that are as narrow as, or narrower than, the cells themselves. How their thin, viscoelastic membrane deforms, and the tension it carries, matters for mechanosensitive ion channels such as PIEZO1, whose dysfunction is linked to hereditary anemia. For my dissertation, I built a spectral boundary integral solver coupled with thin-shell mechanics that simulates red blood cells in unbounded flow and in microcapillaries.</p>
+            <ul class="results">
+              <li>A fully implicit, multistep time integrator for spectral boundary integral simulations of red blood cell flow takes substantially larger time steps while needing about as many matrix–vector products as explicit methods. <a class="cite" href="https://doi.org/10.1063/5.0055036" target="_blank" rel="noopener">Phys. Fluids 2021 · Featured</a></li>
+              <li>Accounting for membrane viscoelasticity is essential to capture the transient shapes observed when a red blood cell starts flowing in a microcapillary. <a class="cite" href="https://doi.org/10.1016/j.bpj.2023.01.010" target="_blank" rel="noopener">Biophys. J. 2023</a></li>
+              <li>Extending the framework to droplets whose interfaces carry their own shear and dilatational viscosity reveals how interfacial rheology governs a viscous drop that encloses a translating particle. <a class="cite" href="https://arxiv.org/abs/2605.01196" target="_blank" rel="noopener">arXiv 2026 · under review, JFM</a></li>
+            </ul>
+          </div>
+          <div class="thrust-media fig-grid reveal">
+            <figure class="fig fig--wide">
+              <div class="fig-img"><img src="assets/img/research/rbc-start-up-shapes.webp" width="1616" height="229" loading="lazy" decoding="async" alt="Seven snapshots of a simulated red blood cell, from a round disk to an increasingly bullet-like, parachute shape, as it starts flowing in a narrow capillary."></div>
+              <figcaption>A red blood cell with a viscoelastic membrane deforms from rest into a parachute shape in start-up capillary flow. Simulations by A. Gürbüz; see Gürbüz et al., <cite>Biophysical Journal</cite> (2023).</figcaption>
+            </figure>
+            <figure class="fig fig--wide fig--contain">
+              <div class="fig-img fig-img--dark"><img src="assets/img/research/drop-enclosing-particle.webp" width="584" height="586" loading="lazy" decoding="async" alt="Cross-section of a spherical drop with a strongly viscous interface; a small black particle inside translates to the right, with velocity arrows and a glowing color map showing the flow inside and outside the drop."></div>
+              <figcaption>Flow inside and outside a drop with a strongly viscous interface, enclosing a translating particle. Gürbüz et al., arXiv:2605.01196 (under review).</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <!-- Thrust 2 -->
+        <article class="thrust thrust--flip" aria-labelledby="t2-title">
+          <div class="thrust-copy reveal">
+            <p class="thrust-num"><b>02</b>Thrust two</p>
+            <h3 id="t2-title">Microswimmers in complex environments</h3>
+            <p>At the scale of a bacterium there is no inertia: stop pushing and you stop instantly. Swimming then depends on non-reciprocal motion and on how a swimmer's flow interacts with its surroundings, such as walls, porous tissue, and polymeric fluids like mucus. I study how confinement, porosity, body elasticity, and non-Newtonian rheology reshape propulsion, with an eye toward soft microrobots for targeted drug delivery and minimally invasive medicine.</p>
+            <ul class="results">
+              <li>A three-sphere microswimmer in a tube slows down as the confinement tightens; we explained the slowdown through how the wall alters the hydrodynamic interactions between the spheres. <a class="cite" href="https://doi.org/10.1063/5.0163348" target="_blank" rel="noopener">Phys. Fluids 2023 · Featured · Scilight</a></li>
+              <li>In a porous (Brinkman) medium, the same screening of hydrodynamic interactions reduces the swimmer's speed and efficiency, unlike undulatory, helical, and squirmer-type swimmers, whose propulsion is enhanced. <a class="cite" href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">Phys. Rev. E 2024</a></li>
+              <li>An elastic filament driven magnetically at both ends switches between forward, backward, and “horseshoe” propulsion modes purely through the balance of viscous and elastic forces. <a class="cite" href="https://doi.org/10.1039/D3SM00464C" target="_blank" rel="noopener">Soft Matter 2023</a></li>
+              <li>As shear thinning strengthens, the thinned fluid around a pair of collinear squirmers grows from a shell hugging each swimmer to a region filling the domain. <a class="cite" href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">Phys. Rev. Fluids 2026</a></li>
+            </ul>
+          </div>
+          <div class="thrust-media fig-grid reveal">
+            <figure class="fig fig--wide fig--contain">
+              <div class="fig-img"><img src="assets/img/research/three-sphere-confinement.webp" width="769" height="570" loading="lazy" decoding="async" alt="Schematic of three spheres of radius R connected by two arms of lengths D and D minus epsilon, swimming along the axis of a cylindrical tube of radius R_c."></div>
+              <figcaption>A three-sphere swimmer confined in a capillary tube: its speed drops as the tube narrows. Gürbüz et al., <cite>Physics of Fluids</cite> (2023).</figcaption>
+            </figure>
+            <figure class="fig fig--wide">
+              <div class="fig-img"><img src="assets/img/research/three-sphere-brinkman-flow.webp" width="1800" height="810" loading="lazy" decoding="async" alt="Three rows of four color maps showing the flow speed around a three-sphere swimmer during its stroke; the colored disturbance shrinks from row to row as the medium becomes less permeable."></div>
+              <figcaption>Flow speed around a three-sphere swimmer during its stroke. The long-ranged disturbance is progressively screened as the medium becomes less permeable (rows: α = 0, 1, 10). Liao, Lemus, Gürbüz et al., <cite>Physical Review E</cite> (2024).</figcaption>
+            </figure>
+            <figure class="fig fig--wide">
+              <div class="fig-img"><img src="assets/img/research/magnetic-filament-modes.webp" width="1800" height="405" loading="lazy" decoding="async" alt="Three panels of overlaid filament shapes, with red tracks showing the filament end moving forward, backward, or tracing a horseshoe."></div>
+              <figcaption>Forward, backward, and “horseshoe” modes of an elastic filament magnetically driven at both ends. Gürbüz et al., <cite>Soft Matter</cite> (2023).</figcaption>
+            </figure>
+            <figure class="fig fig--wide">
+              <div class="fig-img"><img src="assets/img/research/squirmer-pair-shear-thinning.webp" width="1800" height="672" loading="lazy" decoding="async" alt="Three color maps of the local viscosity around a pusher and a puller squirmer aligned vertically, for Carreau numbers 1, 10, and 100; the low-viscosity region grows with the Carreau number."></div>
+              <figcaption>Local viscosity around a puller–pusher squirmer pair as shear thinning strengthens (Cu = 1, 10, 100). Liao, Gürbüz et al., <cite>Physical Review Fluids</cite> (2026).</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <!-- Thrust 3 -->
+        <article class="thrust thrust--stack" aria-labelledby="t3-title">
+          <div class="thrust-copy reveal">
+            <p class="thrust-num"><b>03</b>Thrust three</p>
+            <h3 id="t3-title">Scientific machine learning for mechanics</h3>
+            <p>Forward solvers answer one question well: given the physics, what happens? Experiments and design ask the reverse. Which membrane properties produced the cell shapes recorded under a microscope? Which surface viscosities fit an observed droplet evolution? Which actuation will steer a microrobot along a path? These inverse problems are ill-posed, the data are sparse and noisy, and brute-force simulation is expensive. I build tools that answer them while keeping the governing equations at the center.</p>
+          </div>
+          <div class="thrust-points reveal">
+            <ul class="results">
+              <li><strong>Physics-informed neural networks</strong> for squirmer locomotion that combine PINNs with spectral representations and build Stokes-flow physics and far-field conditions directly into training.</li>
+              <li><strong>Continuous data assimilation</strong> for the 3D simplified Bardina turbulence model: proven <i>L</i><sup>2</sup> and <i>H</i><sup>1</sup> error bounds under viscosity mismatch, and a posteriori formulas that recover the unknown viscosity from sparse observations (with colleagues at Towson; manuscript in preparation).</li>
+              <li><strong>End-to-end differentiable simulation</strong> through spectral boundary integral solvers, which turns the recovery of membrane and interfacial properties from observed shapes into gradient-based optimization.</li>
+            </ul>
+          </div>
+          <div class="thrust-media reveal">
+            <figure class="fig">
+              <div class="fig-img"><img src="assets/img/research/sciml-schematic.webp" width="2400" height="902" loading="lazy" decoding="async" alt="Three-panel schematic: (A) a neural network with a spectral representation trained on a composite loss of Stokes equations, surface condition, and far-field decay; (B) continuous data assimilation by nudging a model toward sparse, noisy observations, with proved error bounds; (C) a differentiable spectral boundary integral solver whose predicted shapes are compared with observed shapes to update unknown parameters."></div>
+              <figcaption>Three ways to keep physics central while learning from data: (A) a physics-informed neural network solver, (B) continuous data assimilation by nudging, and (C) differentiation through the solver itself. Schematics of methods, not results.</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <div class="future reveal">
+          <p class="eyebrow">Where it's heading</p>
+          <ul class="future-grid">
+            <li class="future-card">
+              <h4>Diseased cells in confined flow</h4>
+              <p>How parasite-driven membrane stiffening in malaria changes red blood cell transit through capillary-scale constrictions, and how it redistributes the membrane tension that gates channels such as PIEZO1.</p>
+            </li>
+            <li class="future-card">
+              <h4>Droplets at their limit</h4>
+              <p>Coupling electrohydrodynamics with surface viscosity, elasticity, and surfactant transport to find the field strength beyond which no steady drop shape exists, a design limit for droplet microfluidics.</p>
+            </li>
+            <li class="future-card">
+              <h4>Phase diagrams for soft microrobots</h4>
+              <p>Mapping forward, backward, and reoriented swimming of magnetically driven filaments across sperm and Deborah numbers in shear-thinning and viscoelastic fluids, and turning the map into design rules.</p>
+            </li>
+            <li class="future-card">
+              <h4>Inverse problems with guarantees</h4>
+              <p>Differentiating through spectral solvers to infer membrane moduli and surface viscosities from observations, and extending nudging-based data assimilation with provable error bounds to these flows.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="also reveal">
+          <p class="label">Also</p>
+          <p><strong>Environmental modeling.</strong> With Christopher J. Salice, I developed, coded, and validated a bioenergetics-based model of PFAS (PFOS) accumulation in nestling tree swallows and house wrens. The model is part of the SERDP Final Report for Project ER18-1626 on the ecological risk of PFAS to insectivorous birds (2026).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PUBLICATIONS ============================ -->
+    <section class="section" id="publications" aria-labelledby="pubs-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">03 · Publications</p>
+          <h2 id="pubs-title">Papers, preprints &amp; code</h2>
+          <p class="lede">Six peer-reviewed journal articles, two of them selected as Featured Articles in <i>Physics of Fluids</i>, one first-author manuscript under review, and three open-source simulation codes.</p>
+        </div>
+
+        <div class="pub-toolbar">
+          <div class="filters" role="group" aria-label="Filter publications" data-pub-filters hidden>
+            <button type="button" class="filter" data-filter="all" aria-pressed="true">All<span class="count"></span></button>
+            <button type="button" class="filter" data-filter="published" aria-pressed="false">Journal articles<span class="count"></span></button>
+            <button type="button" class="filter" data-filter="review" aria-pressed="false">Under review<span class="count"></span></button>
+            <button type="button" class="filter" data-filter="prep" aria-pressed="false">In preparation<span class="count"></span></button>
+            <button type="button" class="filter" data-filter="first" aria-pressed="false">First-author<span class="count"></span></button>
+          </div>
+          <p class="pub-status"><span data-pub-status aria-live="polite"></span> Also on <a href="https://scholar.google.com/citations?user=TRo7GwwAAAAJ" target="_blank" rel="noopener">Google Scholar</a> and <a href="https://orcid.org/0000-0003-3418-4883" target="_blank" rel="noopener">ORCID</a>.</p>
+        </div>
+
+        <div class="pub-group" data-pub-group>
+          <h3>Journal articles</h3>
+          <ol class="pub-list" reversed>
+            <li class="pub" data-tags="published">
+              <div class="pub-year">2026</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">Collinear swimming of a squirmer pair in Newtonian and shear-thinning fluids</a></p>
+                <p class="pub-authors">C.-T. Liao, <span class="me">A. Gürbüz</span>, V. Bueno Garcia, Y.-N. Young, D. Palaniappan, O. S. Pak</p>
+                <p class="pub-venue"><i>Physical Review Fluids</i> 11(9), 093103 (2026)</p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-liao2026">@article{Liao2026Collinear,
+  author  = {Liao, Chih-Tang and G{\"u}rb{\"u}z, Ali and Bueno Garcia, Victor and Young, Yuan-Nan and Palaniappan, Devanayagam and Pak, On Shun},
+  title   = {Collinear swimming of a squirmer pair in {N}ewtonian and shear-thinning fluids},
+  journal = {Physical Review Fluids},
+  volume  = {11},
+  number  = {9},
+  pages   = {093103},
+  year    = {2026},
+  doi     = {10.1103/4zfv-pxg4}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-liao2026"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+            <li class="pub" data-tags="published">
+              <div class="pub-year">2024</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">Propulsion of a three-sphere microrobot in a porous medium</a></p>
+                <p class="pub-authors">C.-T. Liao, A. Lemus, <span class="me">A. Gürbüz</span>, A. C. H. Tsang, O. S. Pak, A. Daddi-Moussa-Ider</p>
+                <p class="pub-venue"><i>Physical Review E</i> 109(6), 065106 (2024)</p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-liao2024">@article{Liao2024Propulsion,
+  author  = {Liao, Chih-Tang and Lemus, Andrew and G{\"u}rb{\"u}z, Ali and Tsang, Alan C. H. and Pak, On Shun and Daddi-Moussa-Ider, Abdallah},
+  title   = {Propulsion of a three-sphere microrobot in a porous medium},
+  journal = {Physical Review E},
+  volume  = {109},
+  number  = {6},
+  pages   = {065106},
+  year    = {2024},
+  doi     = {10.1103/PhysRevE.109.065106}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-liao2024"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+            <li class="pub" data-tags="published first">
+              <div class="pub-year">2023</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1039/D3SM00464C" target="_blank" rel="noopener">Elastohydrodynamic propulsion of a filament magnetically driven at both ends</a></p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, K. Qin, J. J. Abbott, O. S. Pak</p>
+                <p class="pub-venue"><i>Soft Matter</i> 19(37), 7100–7108 (2023)</p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1039/D3SM00464C" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-gurbuz2023sm">@article{Gurbuz2023Elastohydrodynamic,
+  author  = {G{\"u}rb{\"u}z, Ali and Qin, Ke and Abbott, Jake J. and Pak, On Shun},
+  title   = {Elastohydrodynamic propulsion of a filament magnetically driven at both ends},
+  journal = {Soft Matter},
+  volume  = {19},
+  number  = {37},
+  pages   = {7100--7108},
+  year    = {2023},
+  doi     = {10.1039/D3SM00464C}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-gurbuz2023sm"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+            <li class="pub" data-tags="published first">
+              <div class="pub-year">2023</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1063/5.0163348" target="_blank" rel="noopener">The effect of axisymmetric confinement on propulsion of a three-sphere microswimmer</a></p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, A. Lemus, E. Demir, O. S. Pak, A. Daddi-Moussa-Ider</p>
+                <p class="pub-venue"><i>Physics of Fluids</i> 35(8) (2023) <span class="badge">Featured Article</span><span class="badge badge--teal">AIP Scilight</span></p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1063/5.0163348" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-gurbuz2023pof">@article{Gurbuz2023Confinement,
+  author  = {G{\"u}rb{\"u}z, Ali and Lemus, Andrew and Demir, Ebru and Pak, On Shun and Daddi-Moussa-Ider, Abdallah},
+  title   = {The effect of axisymmetric confinement on propulsion of a three-sphere microswimmer},
+  journal = {Physics of Fluids},
+  volume  = {35},
+  number  = {8},
+  year    = {2023},
+  doi     = {10.1063/5.0163348}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-gurbuz2023pof"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+            <li class="pub" data-tags="published first">
+              <div class="pub-year">2023</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1016/j.bpj.2023.01.010" target="_blank" rel="noopener">Effects of membrane viscoelasticity on the red blood cell dynamics in a microcapillary</a></p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, O. S. Pak, M. Taylor, M. V. Sivaselvan, F. Sachs</p>
+                <p class="pub-venue"><i>Biophysical Journal</i> 122(11), 2230–2241 (2023)</p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1016/j.bpj.2023.01.010" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-gurbuz2023bpj">@article{Gurbuz2023Membrane,
+  author  = {G{\"u}rb{\"u}z, Ali and Pak, On Shun and Taylor, Michael and Sivaselvan, Mettupalayam V. and Sachs, Frederick},
+  title   = {Effects of membrane viscoelasticity on the red blood cell dynamics in a microcapillary},
+  journal = {Biophysical Journal},
+  volume  = {122},
+  number  = {11},
+  pages   = {2230--2241},
+  year    = {2023},
+  doi     = {10.1016/j.bpj.2023.01.010}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-gurbuz2023bpj"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+            <li class="pub" data-tags="published">
+              <div class="pub-year">2021</div>
+              <div>
+                <p class="pub-title"><a href="https://doi.org/10.1063/5.0055036" target="_blank" rel="noopener">Fully implicit spectral boundary integral computation of red blood cell flow</a></p>
+                <p class="pub-authors">P.-C. Chao, <span class="me">A. Gürbüz</span>, F. Sachs, M. V. Sivaselvan</p>
+                <p class="pub-venue"><i>Physics of Fluids</i> 33(7), 071909 (2021) <span class="badge">Featured Article</span></p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://doi.org/10.1063/5.0055036" target="_blank" rel="noopener">DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-chao2021">@article{Chao2021FullyImplicit,
+  author  = {Chao, Pei-Chuan and G{\"u}rb{\"u}z, Ali and Sachs, Frederick and Sivaselvan, Mettupalayam V.},
+  title   = {Fully implicit spectral boundary integral computation of red blood cell flow},
+  journal = {Physics of Fluids},
+  volume  = {33},
+  number  = {7},
+  pages   = {071909},
+  year    = {2021},
+  doi     = {10.1063/5.0055036}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-chao2021"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="pub-group" data-pub-group>
+          <h3>Under review</h3>
+          <ol class="pub-list">
+            <li class="pub" data-tags="review first">
+              <div class="pub-year">2026</div>
+              <div>
+                <p class="pub-title"><a href="https://arxiv.org/abs/2605.01196" target="_blank" rel="noopener">Effects of surface viscosities on the motion of a droplet enclosing a translating particle</a></p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, H. Nganguia, G. Zhu, L. Zhu, Y.-N. Young, O. S. Pak</p>
+                <p class="pub-venue">Submitted to the <i>Journal of Fluid Mechanics</i></p>
+                <div class="pub-links">
+                  <a class="pub-link" href="https://arxiv.org/abs/2605.01196" target="_blank" rel="noopener">arXiv:2605.01196<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+                  <details class="bibtex"><summary class="pub-link">BibTeX</summary>
+                    <div class="bib-box"><pre id="bib-gurbuz2026">@misc{Gurbuz2026SurfaceViscosities,
+  author        = {G{\"u}rb{\"u}z, Ali and Nganguia, Herv{\'e} and Zhu, Guangpu and Zhu, Lailai and Young, Yuan-Nan and Pak, On Shun},
+  title         = {Effects of surface viscosities on the motion of a droplet enclosing a translating particle},
+  year          = {2026},
+  eprint        = {2605.01196},
+  archivePrefix = {arXiv},
+  note          = {Under review at the Journal of Fluid Mechanics}
+}</pre><button type="button" class="copy-btn" data-copy="#bib-gurbuz2026"><svg aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+                  </details>
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="pub-group" data-pub-group>
+          <h3>In preparation</h3>
+          <ol class="pub-list">
+            <li class="pub" data-tags="prep first">
+              <div class="pub-year">—</div>
+              <div>
+                <p class="pub-title">Rotational speed of a swirling spheroidal squirmer in a shear-thinning fluid</p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, D. Palaniappan, H. Nganguia</p>
+              </div>
+            </li>
+            <li class="pub" data-tags="prep first">
+              <div class="pub-year">—</div>
+              <div>
+                <p class="pub-title">Electrohydrodynamics of viscous droplets with complex interfaces</p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, D. Das, Y.-N. Young, H. Nganguia, O. S. Pak</p>
+              </div>
+            </li>
+            <li class="pub" data-tags="prep first">
+              <div class="pub-year">—</div>
+              <div>
+                <p class="pub-title">A spectral boundary integral method for the electrohydrodynamics of drops with surface viscosity</p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, H. Nganguia, Y.-N. Young, O. S. Pak</p>
+              </div>
+            </li>
+            <li class="pub" data-tags="prep">
+              <div class="pub-year">—</div>
+              <div>
+                <p class="pub-title">Error analysis and viscosity recovery for the 3D simplified Bardina model via continuous data assimilation</p>
+                <p class="pub-authors">M. Doring, <span class="me">A. Gürbüz</span>, J. Tian</p>
+              </div>
+            </li>
+            <li class="pub" data-tags="prep first">
+              <div class="pub-year">—</div>
+              <div>
+                <p class="pub-title">Boundary integral simulations of red blood cell dynamics</p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span>, O. S. Pak, M. V. Sivaselvan</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="pub-group" data-pub-group>
+          <h3>Dissertation</h3>
+          <ol class="pub-list">
+            <li class="pub" data-tags="thesis first">
+              <div class="pub-year">2021</div>
+              <div>
+                <p class="pub-title">Simulations of red blood cell flow by boundary integral methods</p>
+                <p class="pub-authors"><span class="me">A. Gürbüz</span></p>
+                <p class="pub-venue">Ph.D. dissertation, University at Buffalo · Advisor: M. V. Sivaselvan</p>
+                <p class="pub-note">The dissertation's solvers are available as open-source MATLAB codes (below).</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="software" id="software">
+          <p class="eyebrow">Open-source software</p>
+          <ul class="software-grid">
+            <li class="repo reveal">
+              <div class="repo-head"><p class="repo-name">SpectralBoundary<wbr>IntegralMethod.m</p><span class="lang">MATLAB</span></div>
+              <p>Spectral boundary integral solver for the motion and deformation of a red blood cell in unbounded Stokes flow (dissertation, chapter 4).</p>
+              <div class="repo-links">
+                <a class="pub-link" href="https://github.com/aligurbu/SpectralBoundaryIntegralMethod.m" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+                <a class="pub-link" href="https://doi.org/10.5281/zenodo.7668525" target="_blank" rel="noopener">Zenodo DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+              </div>
+            </li>
+            <li class="repo reveal">
+              <div class="repo-head"><p class="repo-name">RBCFlowIn<wbr>RigidTube.m</p><span class="lang">MATLAB</span></div>
+              <p>Red blood cell squeezing through a microcapillary constriction: a spectral Galerkin boundary integral method for the cell coupled with a boundary element method for the vessel (chapter 6).</p>
+              <div class="repo-links">
+                <a class="pub-link" href="https://github.com/aligurbu/RBCFlowInRigidTube.m" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+                <a class="pub-link" href="https://doi.org/10.5281/zenodo.7668539" target="_blank" rel="noopener">Zenodo DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+              </div>
+            </li>
+            <li class="repo reveal">
+              <div class="repo-head"><p class="repo-name">StokesFlowIn<wbr>RigidTube.m</p><span class="lang">MATLAB</span></div>
+              <p>High-order, weakly singular boundary element method for pressure-driven Stokes flow in rigid vessels with varying cross-section (chapter 5).</p>
+              <div class="repo-links">
+                <a class="pub-link" href="https://github.com/aligurbu/StokesFlowInRigidTube.m" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+                <a class="pub-link" href="https://doi.org/10.5281/zenodo.7668470" target="_blank" rel="noopener">Zenodo DOI<svg aria-hidden="true"><use href="#i-ext"/></svg></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ FLOW LAB BAND ============================ -->
+    <section class="lab-band" aria-labelledby="lab-title">
+      <div class="container lab-band-grid">
+        <div class="reveal">
+          <p class="eyebrow">Flow Lab</p>
+          <h2 id="lab-title">Play with the physics</h2>
+          <p>Interactive explainers built on the same mathematics as my research. They compute everything live in your browser, with no videos or pre-rendered frames.</p>
+          <ul class="lab-list">
+            <li><span>01</span>Steer a squirmer and watch pushers, pullers, and neutral swimmers stir the fluid differently.</li>
+            <li><span>02</span>Build a three-sphere swimmer, discover why reciprocal strokes go nowhere, and slow it down in a porous medium.</li>
+          </ul>
+          <a class="btn btn-ghost" href="flow-lab/">Open the Flow Lab <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <svg class="lab-art reveal" viewBox="0 0 520 360" role="img" aria-label="Streamlines of Stokes flow around a sphere">
+          <defs>
+            <linearGradient id="sl-grad" x1="0" x2="1" y1="0" y2="0">
+              <stop offset="0" stop-color="#1e3a5f"/>
+              <stop offset=".45" stop-color="#5eead4"/>
+              <stop offset="1" stop-color="#1e3a5f"/>
+            </linearGradient>
+            <radialGradient id="lab-sphere" cx="38%" cy="35%" r="70%">
+              <stop offset="0" stop-color="#ffb3ba"/>
+              <stop offset=".5" stop-color="#e23b52"/>
+              <stop offset="1" stop-color="#7a0d20"/>
+            </radialGradient>
+            <radialGradient id="lab-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#ff5a6a" stop-opacity=".35"/>
+              <stop offset="1" stop-color="#ff5a6a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <g data-streamlines>
+            <path class="sl" d="M-4.0 360.8 95.7 359.7 148.6 359.8 194.7 361.0 246.0 364.0"/>
+            <path class="sl" d="M246.0 -4.0 194.7 -1.0 148.6 0.2 95.7 0.3 -4.0 -0.8"/>
+            <path class="sl" d="M-4.0 342.4 114.6 340.9 170.5 341.2 212.8 343.1 301.2 349.7 352.5 351.4 406.2 351.3 524.0 349.2"/>
+            <path class="sl" d="M524.0 10.8 406.2 8.7 352.5 8.6 301.2 10.3 212.8 16.9 170.5 18.8 114.6 19.1 -4.0 17.6"/>
+            <path class="sl" d="M-4.0 324.1 125.2 322.0 175.8 322.3 215.1 324.4 297.4 331.9 345.7 333.7 393.3 333.5 524.0 330.8"/>
+            <path class="sl" d="M524.0 29.2 393.3 26.5 345.7 26.3 297.4 28.1 215.1 35.6 175.8 37.7 125.2 38.0 -4.0 35.9"/>
+            <path class="sl" d="M-4.0 305.9 137.3 303.1 181.8 303.3 218.1 305.6 292.9 314.2 314.8 315.6 338.2 316.3 379.0 316.0 524.0 312.2"/>
+            <path class="sl" d="M524.0 47.8 379.0 44.0 338.2 43.7 314.8 44.4 292.9 45.8 218.1 54.4 181.8 56.7 137.3 56.9 -4.0 54.1"/>
+            <path class="sl" d="M-4.0 287.7 151.6 284.2 188.6 284.3 205.2 285.2 221.1 286.8 268.7 294.3 288.3 296.8 308.7 298.4 329.9 299.1 363.1 298.7 456.8 295.3 524.0 293.6"/>
+            <path class="sl" d="M524.0 66.4 456.8 64.7 363.1 61.3 329.9 60.9 308.7 61.6 288.3 63.2 268.7 65.7 221.1 73.2 205.2 74.8 188.6 75.7 151.6 75.8 -4.0 72.3"/>
+            <path class="sl" d="M-4.0 269.6 73.0 268.1 166.7 265.1 195.4 265.2 209.8 266.2 223.4 268.0 266.4 276.9 283.8 279.7 301.9 281.6 321.6 282.3 351.8 281.7 450.7 276.8 524.0 274.8"/>
+            <path class="sl" d="M524.0 85.2 450.7 83.2 351.8 78.3 321.6 77.7 301.9 78.4 283.8 80.3 266.4 83.1 223.4 92.0 209.8 93.8 195.4 94.8 166.7 94.9 73.0 91.9 -4.0 90.4"/>
+            <path class="sl" d="M-4.0 251.6 87.4 249.8 179.6 246.2 200.7 246.3 213.5 247.4 225.6 249.5 262.6 259.6 278.5 263.1 295.1 265.3 312.5 266.1 337.4 265.3 394.8 260.9 431.1 258.8 472.6 257.2 524.0 256.0"/>
+            <path class="sl" d="M524.0 104.0 472.6 102.8 431.1 101.2 394.8 99.1 337.4 94.7 312.5 93.9 295.1 94.7 278.5 96.9 262.6 100.4 225.6 110.5 213.5 112.6 200.7 113.7 179.6 113.8 87.4 110.2 -4.0 108.4"/>
+            <path class="sl" d="M-4.0 233.6 88.2 232.1 184.1 228.2 203.7 228.2 214.3 229.3 224.9 231.6 258.9 243.3 273.9 247.5 288.3 249.9 302.7 250.8 323.8 249.7 376.7 243.5 413.0 240.6 460.5 238.5 524.0 237.1"/>
+            <path class="sl" d="M524.0 122.9 460.5 121.5 413.0 119.4 376.7 116.5 323.8 110.3 302.7 109.2 288.3 110.1 273.9 112.5 258.9 116.7 224.9 128.4 214.3 130.7 203.7 131.8 184.1 131.8 88.2 127.9 -4.0 126.4"/>
+            <path class="sl" d="M-4.0 215.7 93.4 214.5 187.1 211.2 203.7 211.3 212.0 212.4 218.8 214.3 243.8 225.6 261.1 231.4 279.3 235.5 294.4 236.7 311.7 235.4 358.6 226.2 392.6 222.2 443.2 219.6 524.0 218.1"/>
+            <path class="sl" d="M524.0 141.9 443.2 140.4 392.6 137.8 358.6 133.8 311.7 124.6 294.4 123.3 279.3 124.5 261.1 128.6 243.8 134.4 218.8 145.7 212.0 147.6 203.7 148.7 187.1 148.8 93.4 145.5 -4.0 144.3"/>
+            <path class="sl" d="M-4.0 197.8 104.0 197.0 189.4 195.3 204.5 195.6 212.0 196.9 217.3 199.2 234.6 213.6 240.7 217.2 246.8 219.8 253.6 221.8 260.4 222.9 286.8 224.5 295.1 224.0 303.7 222.4 312.8 219.5 331.4 211.8 340.4 208.6 353.3 205.5 369.2 203.3 391.8 201.5 421.3 200.4 524.0 199.1"/>
+            <path class="sl" d="M524.0 160.9 421.3 159.6 391.8 158.5 369.2 156.7 353.3 154.5 340.4 151.4 331.4 148.2 312.8 140.5 303.7 137.6 295.1 136.0 286.8 135.5 260.4 137.1 253.6 138.2 246.8 140.2 240.7 142.8 234.6 146.4 217.3 160.8 212.0 163.1 204.5 164.4 189.4 164.7 104.0 163.0 -4.0 162.2"/>
+          </g>
+          <circle cx="260" cy="180" r="92" fill="url(#lab-halo)"/>
+          <circle cx="260" cy="180" r="40" fill="url(#lab-sphere)"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ============================ TEACHING ============================ -->
+    <section class="section" id="teaching" aria-labelledby="teaching-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">04 · Teaching &amp; mentoring</p>
+          <h2 id="teaching-title">Teaching as a shared expedition</h2>
+        </div>
+
+        <div class="teach-grid">
+          <div class="teach-philosophy reveal">
+            <p class="pullquote">Everything I know, I know because I learned it.</p>
+            <p>My best teachers were companions in learning. They knew the territory, but they let me follow my intuition, get lost, and sometimes fail, and those wrong turns are where I learned the most. I try to give my students the same freedom, with enough structure that no one is left without direction: clear guidance and worked examples first, then more room to make decisions and follow their own questions, until an idea feels almost rediscovered.</p>
+            <p>In mathematics and engineering, the final answer matters, but so does the reasoning that produces it. I ask students to identify assumptions, break hard problems into parts, compare approaches, and test whether a result makes sense, so they leave more confident that they can work through problems they have never seen.</p>
+            <div class="growth">
+              <p><strong>Listening to students.</strong> After my first Calculus III, student feedback showed that the computational labs needed more scaffolding. I responded by building an interactive 3D companion for every lecture, and I plan to rebuild the labs around short, low-stakes warm-ups and clearer checkpoints.</p>
+            </div>
+          </div>
+
+          <ul class="practice-grid">
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-eye"/></svg></span>
+              <h4>Make it visible</h4>
+              <p>3D visualizations and interactive simulations, made with Manim, Mathematica, and custom web apps, turn abstract ideas into objects students can rotate and probe. In a vector field, students pick a point and see the curl drawn there: the axis a tiny paddle wheel would spin about.</p>
+            </li>
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-planet"/></svg></span>
+              <h4>Connect it to real problems</h4>
+              <p>Calculus III labs on a Mars rover mission, drone-delivery flight paths (“Project Peregrine”), and microhydrodynamics give students a reason to care about the mathematics.</p>
+            </li>
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-game"/></svg></span>
+              <h4>Turn practice into play</h4>
+              <p>As a structural engineering TA, I introduced <i>Schnittkraftmeister</i>, a game that matches loaded structures with their internal-force diagrams. Students soon tackled systems we had not covered yet, just to beat my score.</p>
+            </li>
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-terminal"/></svg></span>
+              <h4>Compute to investigate</h4>
+              <p>Computational tools should serve inquiry, not software training: Mathematica labs in calculus, and in advanced courses, version-controlled code and notebooks for transparent, reproducible analysis.</p>
+            </li>
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-spark"/></svg></span>
+              <h4>Use AI critically</h4>
+              <p>When AI use is appropriate, students should check its output against governing principles or data, document the help they received, and weigh its limits, privacy, and equitable access.</p>
+            </li>
+            <li class="practice reveal">
+              <span class="ico"><svg aria-hidden="true"><use href="#i-chat"/></svg></span>
+              <h4>Many ways to say “I'm lost”</h4>
+              <p>Low-stakes checks, discussion boards, and anonymous mid-semester surveys show where students need support, so pacing and practice can adapt during the semester.</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="courses-wrap reveal">
+          <p class="eyebrow">Courses</p>
+          <table class="courses">
+            <caption class="visually-hidden">Courses taught</caption>
+            <thead>
+              <tr><th scope="col">Course</th><th scope="col">Role</th><th scope="col">Institution</th><th scope="col">Terms</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="course-code">MATH 275</span><span class="course-name">Calculus III</span><span class="course-note">Designed the full course: 26 lecture modules, three computational labs, and a complete assessment set; interactive 3D lecture companions added in 2026.</span></td>
+                <td><span class="role-tag role-tag--ior">Instructor of record</span></td>
+                <td>Towson University</td>
+                <td>Fall 2025, Fall 2026</td>
+              </tr>
+              <tr>
+                <td><span class="course-code">MATH 273</span><span class="course-name">Calculus I</span><span class="course-note">From the idea of a limit to the Fundamental Theorem of Calculus, in four connected parts.</span></td>
+                <td><span class="role-tag role-tag--ior">Instructor of record</span></td>
+                <td>Towson University</td>
+                <td>Spring 2026</td>
+              </tr>
+              <tr>
+                <td><span class="course-code">CIE 327</span><span class="course-name">Civil Engineering Materials</span><span class="course-note">Laboratory sessions: setting up experiments, running tests, and analyzing data.</span></td>
+                <td><span class="role-tag">Teaching assistant</span></td>
+                <td>University at Buffalo</td>
+                <td>Spring 2018</td>
+              </tr>
+              <tr>
+                <td><span class="course-code">CIE 323</span><span class="course-name">Structural Engineering</span><span class="course-note">Recitation sections, including the <i>Schnittkraftmeister</i> game.</span></td>
+                <td><span class="role-tag">Teaching assistant</span></td>
+                <td>University at Buffalo</td>
+                <td>Fall 2015</td>
+              </tr>
+              <tr class="sub">
+                <td><span class="course-code">CIE 515 · CIE 585 · EAS 209</span><span class="course-name">Advanced Structural Analysis · Bridge Engineering 2 · Mechanics of Solids</span></td>
+                <td><span class="role-tag">Student assistant</span></td>
+                <td>University at Buffalo</td>
+                <td>2013–2020</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="eyebrow interests-head reveal">Ready to teach</p>
+        <div class="interests reveal">
+          <div class="interest">
+            <h4>Mathematics</h4>
+            <p>Calculus I–III, differential equations, linear algebra, numerical analysis, applied mathematics, and mathematical modeling.</p>
+          </div>
+          <div class="interest">
+            <h4>Engineering &amp; physics</h4>
+            <p>Statics, dynamics, mechanics of solids, fluid mechanics, thermodynamics, heat transfer, structural analysis, mathematical methods, and computational methods.</p>
+          </div>
+          <div class="interest">
+            <h4>Graduate</h4>
+            <p>Viscous flows and microhydrodynamics, computational fluid dynamics, finite, boundary, and spectral element methods, thin-shell mechanics, numerical analysis, and scientific machine learning.</p>
+          </div>
+        </div>
+
+        <div class="new-courses">
+          <div class="new-course reveal">
+            <p class="label">New course I'd like to build</p>
+            <h4>Scientific Machine Learning for Computational Science</h4>
+            <p>Connecting physics-based models with data-driven methods: physics-informed neural networks, data assimilation, and differentiable simulation, built on numerical analysis.</p>
+          </div>
+          <div class="new-course reveal">
+            <p class="label">New course I'd like to build</p>
+            <h4>Microhydrodynamics</h4>
+            <p>Life at low Reynolds number for advanced undergraduates and beginning graduate students: Stokes flow, microswimmers, and applications in biology and medicine.</p>
+          </div>
+        </div>
+
+        <div class="mentoring">
+          <div class="reveal">
+            <p class="eyebrow">Mentoring</p>
+            <h3>Independence with accountability</h3>
+          </div>
+          <div class="reveal">
+            <p>At the start of a project, a student and I agree on goals, milestones, and a meeting rhythm. Short written updates before each meeting let us spend our time interpreting results and planning next steps, and the structure loosens as the student's confidence grows.</p>
+            <p>At Santa Clara, I mentored a master's student through a finite-element study of a confined three-sphere microswimmer, from formulating the problem to the student's own plans for doctoral study, and I continue to mentor undergraduate and graduate researchers in computational fluid mechanics. At Buffalo, I mentored undergraduates from Turkey as they adjusted to the U.S. academic system.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TALKS / SERVICE / OUTREACH ============================ -->
+    <section class="section section--alt" id="service" aria-labelledby="service-title">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">05 · Talks, service &amp; outreach</p>
+          <h2 id="service-title">Beyond the papers</h2>
+        </div>
+        <div class="tri-grid">
+          <div class="col reveal">
+            <h3>Presentations</h3>
+            <ul class="timeline">
+              <li><span class="tl-year">2026</span><span><span class="tl-title">Frontier AI in research &amp; teaching: a personal pipeline for rapid scientific contribution</span><span class="tl-meta"><span class="tl-kind">Poster</span>AI Teaching &amp; Research Symposium, Towson University</span></span></li>
+              <li><span class="tl-year">2023</span><span><span class="tl-title">Effects of membrane viscoelasticity on the red blood cell dynamics in a microcapillary</span><span class="tl-meta"><span class="tl-kind">Talk</span>APS March Meeting, Las Vegas</span></span></li>
+              <li><span class="tl-year">2023</span><span><span class="tl-title">Effects of membrane viscoelasticity on the red blood cell dynamics in a microcapillary</span><span class="tl-meta"><span class="tl-kind">Poster</span>School of Engineering Research Showcase, Santa Clara University</span></span></li>
+              <li><span class="tl-year">2019</span><span><span class="tl-title">Pressure-driven red blood cell flow through constrictions</span><span class="tl-meta"><span class="tl-kind">Poster</span>Mathematical Fluids, Materials and Biology, University of Michigan</span></span></li>
+            </ul>
+            <details class="more">
+              <summary>Schools &amp; workshops</summary>
+              <ul>
+                <li>11th Complex Motion in Fluids Summer School, University of Cambridge (2023)</li>
+                <li>JuliaCon 2021 (online)</li>
+                <li>SIAM Conference on Computational Science and Engineering, CSE21 (online)</li>
+                <li>FOMICS-DADSI Winter School on Cardiac Simulations, Università della Svizzera italiana (2020)</li>
+                <li>MLSE 2020: Machine Learning in Science &amp; Engineering, Columbia University (online)</li>
+                <li>Workshop on Mathematical Machine Learning and Application, Penn State (2020, online)</li>
+              </ul>
+            </details>
+          </div>
+          <div class="col reveal">
+            <h3>Service</h3>
+            <ul class="timeline">
+              <li><span class="tl-year">2026–</span><span><span class="tl-title">Faculty Lead, Towson AI Institute</span><span class="tl-meta">Designing and supporting AI-assisted research workflows for faculty and librarians; helping colleagues prepare National AI Research Resource (NAIRR) allocation requests.</span></span></li>
+              <li><span class="tl-year">Referee</span><span><span class="tl-title">Journal reviewer</span><span class="tl-meta"><i>Soft Matter</i> (RSC), <i>Physics of Fluids</i> (AIP), <i>Biocybernetics and Biomedical Engineering</i> (Elsevier)</span></span></li>
+              <li><span class="tl-year">Member</span><span><span class="tl-title">American Physical Society</span><span class="tl-meta">Professional membership</span></span></li>
+            </ul>
+          </div>
+          <div class="col reveal">
+            <h3>Outreach</h3>
+            <ul class="timeline">
+              <li><span class="tl-year">2023–</span><span><span class="tl-title"><a href="https://www.youtube.com/@HappyComputing" target="_blank" rel="noopener">Happy Computing</a> on YouTube</span><span class="tl-meta">Simulation showcases, explanations of scientific concepts, and a behind-the-scenes look at research.</span></span></li>
+              <li><span class="tl-year">2022</span><span><span class="tl-title">Santa Clara University STEM Outreach Program</span><span class="tl-meta">Presented red blood cell simulations and microswimming robots to high-school students, whose questions turned to drug delivery and microsurgery.</span></span></li>
+              <li><span class="tl-year">2008</span><span><span class="tl-title">Co-founder &amp; manager, Anaeli Rehabilitation Center</span><span class="tl-meta">A special education center in Istanbul for students from daycare to college, helping them become self-sufficient at home, at work, and in society.</span></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <ul class="honors">
+          <li class="honor reveal"><span class="tl-year">2023</span><strong>Featured Article &amp; AIP Scilight</strong><span><i>Physics of Fluids</i>, three-sphere swimmer in confinement</span></li>
+          <li class="honor reveal"><span class="tl-year">2021</span><strong>Featured Article</strong><span><i>Physics of Fluids</i>, implicit spectral boundary integral method</span></li>
+          <li class="honor reveal"><span class="tl-year">2013</span><strong>Tau Beta Pi · Chi Epsilon</strong><span>Engineering honor societies, University at Buffalo</span></li>
+          <li class="honor reveal"><span class="tl-year">2013</span><strong>Richard E. Garman Scholarship</strong><span>University at Buffalo</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================ CONTACT ============================ -->
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="container contact-grid">
+        <div class="reveal">
+          <p class="eyebrow">06 · Contact</p>
+          <h2 id="contact-title">Let's talk fluids, teaching, or collaboration.</h2>
+          <a class="contact-email" data-email-user="agurbuz" data-email-domain="towson.edu" href="#contact">agurbuz [at] towson [dot] edu</a>
+          <p>Department of Mathematics, Towson University, Towson, Maryland</p>
+        </div>
+        <ul class="contact-links reveal">
+          <li><a href="cv.pdf" target="_blank" rel="noopener"><span><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Curriculum vitae</span><small>PDF</small></a></li>
+          <li><a href="https://scholar.google.com/citations?user=TRo7GwwAAAAJ" target="_blank" rel="noopener"><span><svg class="icon" aria-hidden="true"><use href="#i-scholar"/></svg>Google Scholar</span><small>citations</small></a></li>
+          <li><a href="https://orcid.org/0000-0003-3418-4883" target="_blank" rel="noopener"><span><svg class="icon" aria-hidden="true"><use href="#i-orcid"/></svg>ORCID</span><small>0000-0003-3418-4883</small></a></li>
+          <li><a href="https://github.com/aligurbu" target="_blank" rel="noopener"><span><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub</span><small>aligurbu</small></a></li>
+          <li><a href="https://www.linkedin.com/in/aligurbu/" target="_blank" rel="noopener"><span><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</span><small>aligurbu</small></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span data-year>2026</span> Ali Gürbüz · Last updated November 2026</p>
+      <p>Hand-built with HTML, CSS, and vanilla JavaScript. No trackers, no cookies. <a href="flow-lab/">Flow Lab</a></p>
+    </div>
+  </footer>
+</body>
+</html>
