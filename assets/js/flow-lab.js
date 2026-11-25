@@ -2,15 +2,20 @@
  * flow-lab.js: the two Flow Lab explorables.
  *
  * 01 Squirmer: UI around SquirmerFlow (flow.js).
- * 02 Three-sphere swimmer (Najafi & Golestanian 2004): spheres of radius a on a line,
- *    joined by arms of prescribed lengths L1(t), L2(t). Sphere i exerts force f_i on the fluid
- *    (along the axis); velocities follow from point-force interactions,
- *        v_i = f_i / zeta + sum_{j != i} G(|x_i - x_j|) f_j,
- *    with G = 1/(4 pi mu r) in a clear fluid (Oseen) and the parallel Brinkman fundamental
- *    solution  G = [1 - (1 + R) e^{-R}] / (2 pi mu R^2 r),  R = alpha r,  in a porous medium,
- *    where the sphere drag becomes zeta = 6 pi mu a (1 + alpha a + alpha^2 a^2 / 9).
+ * 02 Three-sphere swimmer (Najafi & Golestanian 2004), computed with the far-field theory of
+ *    Liao, Lemus, Gurbuz, Tsang, Pak & Daddi-Moussa-Ider, Phys. Rev. E 109, 065106 (2024).
+ *    Spheres of radius a on a line, joined by arms of prescribed lengths L1(t), L2(t). Sphere i
+ *    exerts force f_i on the fluid (along the axis), and
+ *        v_i = mu_S f_i + sum_{j != i} mu_P(|x_i - x_j|) f_j,
+ *    with the Brinkman self-mobility (PRE Eq. 7)
+ *        mu_S = 1 / (6 pi eta a A),   A = 1 + alpha a + (alpha a)^2 / 9,
+ *    and the pair mobility (PRE Eq. 8, after Felderhof 2019)
+ *        mu_P(d) = [B^2 - (1 + alpha d) e^{alpha (2a - d)}] / (2 pi eta alpha^2 d^3 A^2),
+ *        B = 1 + alpha a + (alpha a)^2 / 3,
+ *    which tends to the Rotne-Prager form (3 d^2 - 2 a^2) / (12 pi eta d^3) as alpha -> 0.
  *    Arm kinematics plus zero total force give three linear equations for f_1..f_3.
- *    Units: a = 1, mu = 1, time in stroke cycles.
+ *    The fluid velocity is the sum of the exact flows around three translating spheres.
+ *    Units: a = 1, eta = 1, time in stroke cycles. Arms extend to D = 10 a, as in the paper.
  */
 (function () {
   'use strict';
@@ -93,12 +98,37 @@
   }
 
   /* ================================================================ 02 Three-sphere swimmer */
-  function pairMob(r, al) {
-    if (al === 0) return 1 / (4 * Math.PI * r);
-    var R = al * r;
-    return (1 - (1 + R) * Math.exp(-R)) / (2 * Math.PI * R * R * r);
+  // Pair mobility for motion along the line of centers, spheres a distance d apart (PRE Eq. 8).
+  function pairMob(d, al) {
+    if (al === 0) return (3 * d * d - 2) / (12 * Math.PI * d * d * d);
+    var A = 1 + al + al * al / 9, B = 1 + al + al * al / 3;
+    return (B * B - (1 + al * d) * Math.exp(al * (2 - d))) / (2 * Math.PI * al * al * d * d * d * A * A);
   }
+  // Self-mobility of a sphere in a Brinkman medium (PRE Eq. 7).
   function selfMob(al) { return 1 / (6 * Math.PI * (1 + al + al * al / 9)); }
+
+  // Flow at (dx, y) around a unit sphere translating along the axis with velocity U: the exact
+  // Brinkman solution, a Brinkmanlet plus a potential dipole (Stokeslet plus source dipole when
+  // alpha = 0). Written as u = U [cA e_x + cB (x/r)(x/r, y/r)], free of overflow for large alpha.
+  function sphereFlow(dx, y, U, al, out) {
+    var r = Math.sqrt(dx * dx + y * y), ir = 1 / r, ir3 = ir * ir * ir, cA, cB;
+    if (al === 0) {
+      cA = 0.75 * ir + 0.25 * ir3;
+      cB = 0.75 * ir - 0.75 * ir3;
+    } else {
+      var iS = 1 / (al * r), E = 1.5 * Math.exp(-al * (r - 1)) * ir;
+      var Dd = 0.5 * (1 + 3 / al + 3 / (al * al));            // total potential-dipole strength
+      cA = E * (1 + iS + iS * iS) - Dd * ir3;
+      cB = -E * (1 + 3 * iS + 3 * iS * iS) + 3 * Dd * ir3;
+    }
+    var cx = dx * ir;
+    out.ux += U * (cA + cB * cx * cx);
+    out.uy += U * cB * cx * y * ir;
+  }
+
+  // Slider position (0..50) to alpha a: 0, then 10 steps per decade from 0.013 to 1000.
+  function alphaOf(p) { return p <= 0 ? 0 : Math.pow(10, (p - 20) / 10); }
+  function fmtAlpha(al) { return al === 0 ? '0' : String(Number(al.toPrecision(2))); }
 
   // Prescribed arm lengths and their rates (per cycle) at phase t in [0, 1).
   function strokeAt(type, t, L, e) {
@@ -195,7 +225,7 @@
     var showTracers = $('#ts-tracers'), showArrows = $('#ts-arrows');
 
     var S = {
-      stroke: 'four', L: 6, eps: 3, alpha: 0,
+      stroke: 'four', L: 10, eps: 6, alpha: 0,
       period: 2.6,                 // seconds per stroke cycle
       t: 0, c: 0, camX: 0,
       hist: [], sol: { f: [0, 0, 0], v: [0, 0, 0], V: 0 },
@@ -224,7 +254,7 @@
     }
 
     function view(w, h) {
-      var s = Math.min(w / 21, h / 7.5);
+      var s = Math.min(w / (2 * S.L + 6), h / 7.5);
       return { s: s, x0: S.camX - w / 2 / s, x1: S.camX + w / 2 / s, y0: -h / 2 / s, y1: h / 2 / s };
     }
 
@@ -266,28 +296,22 @@
       var s = strokeAt(S.stroke, S.t, S.L, S.eps);
       solve(s[0], s[1], s[2], s[3], S.alpha, S.sol);
 
-      // tracers ride the point-force (Oseen or Brinkman) flow in the plane of the axis
-      var T = S.tracers, xs = positions(S.t), f = S.sol.f, al = S.alpha;
-      var p = { w: stageEl.clientWidth, h: stageEl.clientHeight }, vw = view(p.w, p.h);
+      // tracers ride the flow in the plane of the axis: the sum of the flows around the three
+      // spheres, each translating with its self-induced velocity mu_S f_j
+      var T = S.tracers, xs = positions(S.t), f = S.sol.f, al = S.alpha, mS = selfMob(al);
+      var p = { w: stageEl.clientWidth, h: stageEl.clientHeight }, vw = view(p.w, p.h), u = { ux: 0, uy: 0 };
       for (var i = 0; i < T.n; i++) {
-        var x = T.x[i], y = T.y[i], ux = 0, uy = 0, bad = false;
+        var x = T.x[i], y = T.y[i], bad = false;
+        u.ux = 0; u.uy = 0;
         for (var j = 0; j < 3; j++) {
-          var dx = x - xs[j], r2 = dx * dx + y * y;
-          if (r2 < 1.3 * 1.3) { bad = true; break; }
-          var r = Math.sqrt(r2), A = 1, B = 1;
-          if (al > 0) {
-            var R = al * r, e = Math.exp(-R), iR = 1 / R, iR2 = iR * iR;
-            A = 2 * e * (1 + iR + iR2) - 2 * iR2;
-            B = -2 * e * (1 + 3 * iR + 3 * iR2) + 6 * iR2;
-          }
-          var cf = f[j] / (8 * Math.PI);
-          ux += cf * (A / r + B * dx * dx / (r2 * r));
-          uy += cf * (B * dx * y / (r2 * r));
+          var dx = x - xs[j];
+          if (dx * dx + y * y < 1.3 * 1.3) { bad = true; break; }
+          sphereFlow(dx, y, mS * f[j], al, u);
         }
         T.age[i] += dtReal;
         if (bad || x < vw.x0 - 1 || x > vw.x1 + 1 || T.age[i] > 14) { spawnTracer(T, i, vw); continue; }
         T.px[i] = x; T.py[i] = y;
-        T.x[i] = x + ux * dtc; T.y[i] = y + uy * dtc;
+        T.x[i] = x + u.ux * dtc; T.y[i] = y + u.uy * dtc;
       }
 
       // camera follows the center lazily, so the net drift stays visible
@@ -314,15 +338,15 @@
       var X = function (x) { return w / 2 + (x - S.camX) * s; }, Y = function (y) { return h / 2 - y * s; };
       ctx.clearRect(0, 0, w, h);
 
-      // axis and ruler (ticks every a, labels every 2a, measured from the start)
+      // axis and ruler (ticks every a, labels every 2a or 5a, measured from the start)
       ctx.strokeStyle = 'rgba(142, 160, 184, 0.18)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(0, Y(0)); ctx.lineTo(w, Y(0)); ctx.stroke();
-      var yb = h - 26;
+      var yb = h - 26, every = s >= 16 ? 2 : 5;
       ctx.fillStyle = 'rgba(142, 160, 184, 0.75)';
       ctx.font = '500 10px "JetBrains Mono", ui-monospace, monospace';
       ctx.textAlign = 'center';
       for (var k = Math.floor(v.x0) - 1; k <= Math.ceil(v.x1) + 1; k++) {
-        var xx = X(k), major = k % 2 === 0;
+        var xx = X(k), major = k % every === 0;
         ctx.strokeStyle = 'rgba(142, 160, 184, ' + (major ? 0.5 : 0.25) + ')';
         ctx.beginPath(); ctx.moveTo(xx, yb); ctx.lineTo(xx, yb + (major ? 8 : 4)); ctx.stroke();
         if (major) ctx.fillText(k === 0 ? '0' : (k > 0 ? '+' : '−') + Math.abs(k) + 'a', xx, yb + 20);
@@ -331,8 +355,14 @@
       ctx.setLineDash([4, 5]); ctx.strokeStyle = 'rgba(94, 234, 212, 0.45)';
       ctx.beginPath(); ctx.moveTo(X(0), 18); ctx.lineTo(X(0), yb - 4); ctx.stroke();
       ctx.setLineDash([]);
+      // the status line sits top right; drop the start label below it where they would collide
+      var status = 'cycle ' + Math.floor(S.t + 1e-9) + '   center ' + (S.c >= 0 ? '+' : '−') + Math.abs(S.c).toFixed(2) + ' a';
+      ctx.font = '500 11px "JetBrains Mono", ui-monospace, monospace';
+      var statusLeft = w - 14 - ctx.measureText(status).width - 8;
+      ctx.font = '500 10px "JetBrains Mono", ui-monospace, monospace';
+      var sx = X(0) + 6, clash = sx < w - 14 && sx + ctx.measureText('start').width > statusLeft;
       ctx.fillStyle = 'rgba(94, 234, 212, 0.8)'; ctx.textAlign = 'left';
-      ctx.fillText('start', X(0) + 6, 26);
+      ctx.fillText('start', sx, clash ? 44 : 26);
 
       // tracers
       if (showTracers.checked && S.tracers) {
@@ -364,7 +394,7 @@
       // sphere velocities
       if (showArrows.checked) {
         for (var m = 0; m < 3; m++) {
-          var vx = S.sol.v[m], len = Math.max(-3.2, Math.min(3.2, vx * 0.22)) * s;
+          var vx = S.sol.v[m], len = Math.max(-3.2, Math.min(3.2, vx * 0.1)) * s;
           arrow(ctx, X(xs[m]), cy - 1.8 * s, X(xs[m]) + len, cy - 1.8 * s, '#5eead4');
         }
       }
@@ -375,7 +405,7 @@
       // status text
       ctx.fillStyle = 'rgba(230, 236, 245, 0.9)'; ctx.textAlign = 'right';
       ctx.font = '500 11px "JetBrains Mono", ui-monospace, monospace';
-      ctx.fillText('cycle ' + Math.floor(S.t + 1e-9) + '   center ' + (S.c >= 0 ? '+' : '−') + Math.abs(S.c).toFixed(2) + ' a', w - 14, 26);
+      ctx.fillText(status, w - 14, 26);
     }
 
     function drawShape() {
@@ -473,9 +503,10 @@
     var pending = 0;
     function onParams() {
       S.eps = parseFloat(epsIn.value);
-      S.alpha = parseFloat(alIn.value);
+      S.alpha = alphaOf(parseFloat(alIn.value));
       epsOut.textContent = S.eps.toFixed(1) + ' a';
-      alOut.textContent = 'α a = ' + (S.alpha === 0 ? '0' : S.alpha.toFixed(2));
+      alOut.textContent = 'α a = ' + fmtAlpha(S.alpha);
+      alIn.setAttribute('aria-valuetext', 'alpha a = ' + fmtAlpha(S.alpha));
       if (!pending) pending = requestAnimationFrame(function () { pending = 0; updateReadout(); if (S.paused) draw(); });
     }
     epsIn.addEventListener('input', onParams);

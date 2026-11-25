@@ -184,7 +184,7 @@
           <aside class="aside-card">
             <h4>In my research</h4>
             <ul>
-              <li><a href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">Collinear swimming of a squirmer pair</a> in Newtonian and shear-thinning fluids: how two squirmers interact, and how shear thinning reshapes the flow between them (<i>Phys. Rev. Fluids</i>, 2026).</li>
+              <li><a href="https://doi.org/10.1103/4zfv-pxg4" target="_blank" rel="noopener">Collinear swimming of a squirmer pair</a> in Newtonian and shear-thinning fluids: an exact solution for the flow around two interacting squirmers, and how shear thinning changes the way they swim together (<i>Phys. Rev. Fluids</i>, 2026).</li>
               <li>The rotational speed of a <b>swirling spheroidal squirmer</b> in a shear-thinning fluid, combining theory and simulation (manuscript in preparation).</li>
               <li><b>Physics-informed neural networks</b> for squirmer locomotion that build exactly these Stokes-flow conditions into training (<a href="../#research">Thrust three</a>).</li>
             </ul>
@@ -226,12 +226,12 @@
               </div>
             </div>
             <div class="control">
-              <p class="control-label"><label for="ts-eps">Arm stroke amplitude</label><output id="ts-eps-out" for="ts-eps">3.0 a</output></p>
-              <input type="range" class="range-mono" id="ts-eps" min="1" max="3.5" step="0.1" value="3">
+              <p class="control-label"><label for="ts-eps">Arm contraction ε</label><output id="ts-eps-out" for="ts-eps">6.0 a</output></p>
+              <input type="range" class="range-mono" id="ts-eps" min="1" max="7" step="0.1" value="6">
             </div>
             <div class="control">
               <p class="control-label"><label for="ts-alpha">Porous-medium screening</label><output id="ts-alpha-out" for="ts-alpha">α a = 0</output></p>
-              <input type="range" class="range-mono" id="ts-alpha" min="0" max="1.2" step="0.02" value="0">
+              <input type="range" class="range-mono" id="ts-alpha" min="0" max="50" step="1" value="0" aria-valuetext="alpha a = 0">
               <div class="range-scale" aria-hidden="true"><span>clear fluid</span><span>less permeable</span></div>
             </div>
             <div class="control">
@@ -255,13 +255,14 @@
             <p>At low Reynolds number, the flow responds instantly to the boundaries, with no memory and no coasting. A stroke that retraces itself backward, like a scallop opening and closing, undoes its own progress exactly. This is Purcell's <em>scallop theorem</em>. Pick <b>Reciprocal</b>: the arms move in step, the loop in shape space collapses to a line, and the center returns to the same spot every cycle, to machine precision.</p>
             <p>The <b>four-step</b> stroke of Najafi and Golestanian breaks the symmetry. Shrink arm 1, shrink arm 2, extend arm 1, extend arm 2: the path in the (<i>L</i><sub>1</sub>, <i>L</i><sub>2</sub>) plane encloses an area, and for small strokes the net displacement per cycle is proportional to that area. Swimming is geometry.</p>
             <h3>Screening in a porous medium</h3>
-            <p>The three-sphere swimmer moves only because each sphere feels the flow created by the other two. In a porous medium, modeled by the Brinkman equation, that long-ranged hydrodynamic interaction is screened over a distance 1/α. Slide the screening up and the swimmer slows down. We found the same effect in our study of this swimmer in a Brinkman medium, where speed and efficiency both drop, in contrast to undulatory, helical, and squirmer-type swimmers, which are enhanced.</p>
+            <p>The three-sphere swimmer moves only because each sphere feels the flow created by the other two. In a porous medium, modeled by the Brinkman equation, that interaction is screened: beyond a distance of about 1/α, the flow around each sphere decays like 1/<i>r</i><sup>3</sup> instead of 1/<i>r</i>. Slide the screening up and the swimmer slows sharply. This is what we found for this swimmer in a Brinkman medium: both its speed and its efficiency drop, unlike the enhanced propulsion reported for undulatory, helical, and squirmer swimmers.</p>
+            <p>Push the screening to <i>α a</i> ≈ 10 and beyond for a subtler result from the same paper: the speed reaches a shallow minimum, then recovers slightly and levels off at a finite value.</p>
           </div>
           <aside class="aside-card">
             <h4>In my research</h4>
             <ul>
               <li><a href="https://doi.org/10.1063/5.0163348" target="_blank" rel="noopener">The effect of axisymmetric confinement</a> on propulsion of a three-sphere microswimmer: a tube slows it down (<i>Phys. Fluids</i>, 2023, Featured Article and AIP Scilight).</li>
-              <li><a href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">Propulsion of a three-sphere microrobot in a porous medium</a>: screening reduces speed and efficiency (<i>Phys. Rev. E</i>, 2024).</li>
+              <li><a href="https://doi.org/10.1103/PhysRevE.109.065106" target="_blank" rel="noopener">Propulsion of a three-sphere microrobot in a porous medium</a>: screening reduces speed and efficiency (<i>Phys. Rev. E</i>, 2024). The explorable above runs this paper's far-field theory.</li>
               <li>Finite-element models of a confined three-sphere swimmer, the project of a master's student I mentored at Santa Clara.</li>
             </ul>
           </aside>
@@ -272,7 +273,9 @@
     <section class="lab-section" aria-labelledby="notes-title">
       <div class="container prose">
         <h2 id="notes-title" class="label">Notes on the models</h2>
-        <p>The squirmer flow is the exact Stokes solution for a sphere with the first two squirming modes (Lighthill 1952; Blake 1971), plus a rotlet when the swimmer is turned. Tracers are integrated with a midpoint rule. The three-sphere swimmer uses point-force hydrodynamic interactions between the spheres, Oseen-level in a clear fluid and the Brinkman fundamental solution in a porous medium, with the sphere drag corrected for Brinkman screening. This captures the mechanism and the trends, not the full resolved calculations in the papers. Everything runs in plain JavaScript, with no libraries and no data sent anywhere.</p>
+        <p>The squirmer flow is the exact Stokes solution for a sphere with the first two squirming modes (Lighthill 1952; Blake 1971), the squirmer model of our <i>Phys. Rev. Fluids</i> paper, shown here for a single swimmer in a Newtonian fluid, plus a rotlet when the swimmer is turned. Its tracers are integrated with a midpoint rule.</p>
+        <p>The three-sphere swimmer runs the far-field theory of our <i>Phys. Rev. E</i> paper (Liao et al., 2024): the Brinkman self-mobility of each sphere and Felderhof's pair mobility, which becomes the Rotne–Prager form in a clear fluid, with zero total force, the four-step stroke of Najafi and Golestanian, and arms that extend to 10<i>a</i>, as in the paper. With these settings it reproduces the far-field curves of the paper's Fig. 2, which agree well with its finite-element simulations. The theory is least accurate when the spheres come close, at large contractions. The flow around each sphere is the exact solution for a sphere translating through a Brinkman medium, and the tracers move in the sum of the three. The smooth and reciprocal strokes use the same hydrodynamics.</p>
+        <p>Everything runs in plain JavaScript, with no libraries and no data sent anywhere.</p>
         <p><a href="../">← Back to the main page</a></p>
       </div>
     </section>
