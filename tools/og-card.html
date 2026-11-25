@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <title>Social card template</title>
+  <!--
+    Template for assets/img/og-card.jpg (1200 x 630), the preview image shown when the site is shared.
+    Regenerate from the repository root with a local server running (python -m http.server 8765), then:
+      chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630
+             --virtual-time-budget=5000 --screenshot=og-card.png http://127.0.0.1:8765/tools/og-card.html
+    and save it as a JPEG (quality ~88) at assets/img/og-card.jpg.
+  -->
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <style>
+    html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #060b14; }
+    .card { position: relative; width: 1200px; height: 630px; overflow: hidden; color: #e6ecf5;
+      background: radial-gradient(760px 520px at 74% 50%, rgba(30, 64, 110, 0.55), transparent 70%), linear-gradient(180deg, #070d18, #050910); }
+    .stage { position: absolute; inset: 0; }
+    .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6, 11, 20, 0.92) 0%, rgba(6, 11, 20, 0.6) 40%, rgba(6, 11, 20, 0) 64%); }
+    .text { position: absolute; left: 72px; top: 92px; width: 640px; }
+    .eyebrow { color: #5eead4; font-size: 15px; white-space: nowrap; }
+    h1 { margin: 26px 0 22px; font-family: var(--font-serif); font-size: 118px; font-weight: 380; line-height: 0.92; letter-spacing: -0.035em; color: #fff; }
+    h1 em { font-weight: 340; color: #ffe3e6; }
+    .line { margin: 0; font-family: var(--font-serif); font-size: 31px; line-height: 1.32; font-weight: 350; color: #d3dce9; }
+    .foot { position: absolute; left: 72px; right: 72px; bottom: 56px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 17px; color: #aebbcd; letter-spacing: 0.04em; }
+    .foot b { color: #5eead4; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="stage" id="stage"></div>
+    <div class="scrim"></div>
+    <div class="text">
+      <p class="eyebrow">Fluid mechanics · Applied mathematics · Scientific ML</p>
+      <h1>Ali <em>Gürbüz</em></h1>
+      <p class="line">Soft bodies in viscous flows: red blood cells, droplets, and microswimmers.</p>
+    </div>
+    <div class="foot"><span>Towson University · Santa Clara University</span><b>aligurbu.github.io</b></div>
+  </div>
+  <script src="../assets/js/flow.js"></script>
+  <script>
+    // Freeze one frame of the live hero simulation: a pusher gliding up and to the right.
+    var flow = new SquirmerFlow(document.getElementById('stage'), { beta: -3, radius: 24, density: 1 / 300, steer: false });
+    flow.pause();
+    var frames = 260, phi = -0.2, travel = flow.U * frames / 60;
+    flow.phi = phi;
+    flow.sx = 885 - travel * Math.cos(phi);
+    flow.sy = 330 - travel * Math.sin(phi);
+    for (var i = 0; i < flow.n; i++) flow._spawn(i, true);
+    flow._warm(frames);
+  </script>
+</body>
+</html>
