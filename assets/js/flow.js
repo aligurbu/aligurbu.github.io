@@ -274,8 +274,8 @@
     var c = rx * ex + ry * ey;
     var P2 = 1.5 * c * c - 0.5;
     var B1 = this.B1, B2 = this.B2;
-    var ur = 0.6666666667 * B1 * c * q3 + B2 * (q4 - q2) * P2;
-    var g = 0.3333333333 * B1 * q3 + B2 * c * q4;          // u_theta / sin(theta)
+    var ur = (2 / 3) * B1 * c * q3 + B2 * (q4 - q2) * P2;
+    var g = (1 / 3) * B1 * q3 + B2 * c * q4;               // u_theta / sin(theta)
     var k = ur + g * c;
     var ux = k * rx - g * ex, uy = k * ry - g * ey;
     if (omega) { var w = omega * q3; ux -= w * dy; uy += w * dx; }   // rotlet
